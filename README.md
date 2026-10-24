@@ -32,6 +32,8 @@ The original project's README and install guide are kept as
 All parts of the theme are **included in this repository** (in `repos/`), frozen at versions that
 work together on Plasma 6.6.6, so the install script downloads nothing.
 
+Everything below is **fixed** in this repository.
+
 **Making it work on Kubuntu 26.04 LTS**
 - The theme's Plasma/6.6 versions (the newest code targets Plasma 6.8); aeroshell-sddm-kcm pinned
   to its last 6.6.5 version.
