@@ -266,16 +266,35 @@ ContainmentItem {
                 interactive: false //disable features we don't need
                 flow: vertical ? GridView.LeftToRight : GridView.TopToBottom
 
-                // The icon size to display when not using the auto-scaling setting
-                readonly property int smallIconSize: Kirigami.Units.iconSizes.small
+                // The icon size to display when not using the auto-scaling setting.
+                // AeroThemePlasma: on a horizontal taskbar taller than the standard 40 px,
+                // grow with it (the tray is 4 px shorter than the taskbar, so 36 px is the
+                // reference): 0.8 px per extra px, so a 40 px taskbar keeps 16 px icons and a
+                // 50 px one gets 24 px. Then snap down to sizes that exist as real images in the
+                // icon theme's status and devices icons (no 22 px there), so icons stay crisp.
+                // +1 px tolerance so a slightly short tray still gets the larger size.
+                readonly property int smallIconSize: {
+                    if (root.vertical) {
+                        return Kirigami.Units.iconSizes.small;
+                    }
+                    const target = Kirigami.Units.iconSizes.small + Math.max(0, gridThickness - 36) * 0.8 + 1;
+                    let best = 16;
+                    for (const size of [16, 20, 24, 32]) {
+                        if (size <= target) {
+                            best = size;
+                        }
+                    }
+                    return best;
+                }
 
                 // Automatically use autoSize setting when in tablet mode, if it's
                 // not already being used
                 readonly property bool autoSize: Plasmoid.configuration.scaleIconsToFit || Kirigami.Settings.tabletMode
 
                 readonly property int gridThickness: root.vertical ? root.width : root.height
-                // Should change to 2 rows/columns on a 56px panel (in standard DPI)
-                readonly property int rowsOrColumns: autoSize ? 1 : Math.max(1, Math.min(count, Math.floor(gridThickness / (smallIconSize + Kirigami.Units.smallSpacing))))
+                // Horizontal: always one row, like Windows 7 (the icons grow with the taskbar instead).
+                // Vertical: several columns once the panel is wide enough.
+                readonly property int rowsOrColumns: (autoSize || !root.vertical) ? 1 : Math.max(1, Math.min(count, Math.floor(gridThickness / (smallIconSize + Kirigami.Units.smallSpacing))))
 
                 // Add margins only if the panel is larger than a small icon (to avoid large gaps between tiny icons)
                 readonly property int cellSpacing: Kirigami.Units.smallSpacing * (Kirigami.Settings.tabletMode ? 6 : Plasmoid.configuration.iconSpacing)

@@ -18,7 +18,8 @@ PlasmaCore.ToolTipArea {
     readonly property int arrowAnimationDuration: Kirigami.Units.shortDuration
     property bool vertical: Plasmoid.formFactor === PlasmaCore.Types.Vertical
     property int iconSize: Kirigami.Units.smallMedium
-    property int expanderSize: Kirigami.Units.iconSizes.smallMedium - Kirigami.Units.smallSpacing / 2
+    // AeroThemePlasma: grows with the tray icons (20 px for the standard 16 px icons)
+    property int expanderSize: iconSize + Kirigami.Units.iconSizes.smallMedium - Kirigami.Units.iconSizes.small - Kirigami.Units.smallSpacing / 2
     implicitWidth: expanderSize+1
     implicitHeight: expanderSize
     activeFocusOnTab: true

@@ -22,6 +22,8 @@ AbstractItem {
         id: iconItem
         parent: taskIcon.iconContainer
         anchors.fill: iconItem.parent
+        // Draw at the tray's icon size (e.g. 20 px) instead of rounding down to 16
+        roundToIconSize: false
 
         source: {
             if (model.status === PlasmaCore.Types.NeedsAttentionStatus) {

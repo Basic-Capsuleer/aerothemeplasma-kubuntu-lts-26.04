@@ -49,8 +49,11 @@ ScrollView {
         readonly property int minimumRows: 4
         readonly property int minimumColumns: 4
 
-        cellWidth: Kirigami.Units.iconSizes.medium //Math.floor(Math.min(hiddenTasksView.availableWidth, popup.Layout.minimumWidth) / minimumRows)
-        cellHeight: Kirigami.Units.iconSizes.medium //Math.floor(popup.Layout.minimumHeight / minimumColumns)
+        // AeroThemePlasma: the icon plus the same 16 px of space as the original 32 px cells for 16 px
+        // icons, so the cells grow along with the tray icons
+        readonly property int cellSize: root.tasksGrid.smallIconSize + Kirigami.Units.iconSizes.medium - Kirigami.Units.iconSizes.small
+        cellWidth: cellSize //Math.floor(Math.min(hiddenTasksView.availableWidth, popup.Layout.minimumWidth) / minimumRows)
+        cellHeight: cellSize //Math.floor(popup.Layout.minimumHeight / minimumColumns)
 
         currentIndex: -1
         //highlight: PlasmaExtras.Highlight {}

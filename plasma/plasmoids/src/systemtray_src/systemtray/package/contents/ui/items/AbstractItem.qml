@@ -248,7 +248,8 @@ PlasmaCore.ToolTipArea {
 
             property alias container: abstractItem
             property alias inVisibleLayout: abstractItem.inVisibleLayout
-            readonly property int size: abstractItem.inVisibleLayout ? root.itemSize : Kirigami.Units.iconSizes.small
+            // AeroThemePlasma: icons in the hidden-icons popup use the same size as the tray icons
+            readonly property int size: abstractItem.inVisibleLayout ? root.itemSize : root.tasksGrid.smallIconSize
 
             Layout.alignment: Qt.Bottom | Qt.AlignHCenter
             Layout.fillHeight: abstractItem.inHiddenLayout ? true : false

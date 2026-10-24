@@ -1375,12 +1375,10 @@ TaskManagerApplet.SmartLauncherItem { }
             anchors.leftMargin:  !label.visible ? Kirigami.Units.smallSpacing : Kirigami.Units.mediumSpacing
             Kirigami.Icon {
                 id: iconBox
-                property int iconSize: {
-                    if(tasksRoot.height <= 30) {
-                        return Kirigami.Units.iconSizes.small;
-                    }
-                    return Kirigami.Units.iconSizes.medium;
-                }
+                property int iconSize: LayoutMetrics.taskIconSize()
+                // Draw at exactly iconSize (e.g. 40 px) instead of rounding down to the nearest
+                // standard size (16/22/32/48); the icon theme has real images at these sizes
+                roundToIconSize: false
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 Layout.minimumWidth: iconSize

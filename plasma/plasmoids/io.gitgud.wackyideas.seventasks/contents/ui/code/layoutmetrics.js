@@ -9,6 +9,33 @@
 const iconMargin = Math.round(Kirigami.Units.smallSpacing / 4);
 const labelMargin = Kirigami.Units.smallSpacing;
 
+// AeroThemePlasma scaling: sizes below are designed for the standard 40 px
+// Windows 7 taskbar. On a taller horizontal taskbar they grow proportionally,
+// and icons snap to sizes that exist as real images in the icon theme, so
+// they stay crisp instead of being enlarged.
+function taskbarScale() {
+    return tasks.vertical ? 1 : Math.max(1, tasks.height / 40);
+}
+
+function crispIconSize(target) {
+    const sizes = [16, 20, 22, 24, 32, 40, 48, 64];
+    let best = sizes[0];
+    for (const size of sizes) {
+        if (size <= target) {
+            best = size;
+        }
+    }
+    return best;
+}
+
+function taskIconSize() {
+    if (!tasks.vertical && tasks.height <= 30) {
+        return Kirigami.Units.iconSizes.small;
+    }
+    // +2 px tolerance so a slightly short taskbar still gets the larger size
+    return crispIconSize(Kirigami.Units.iconSizes.medium * taskbarScale() + 2);
+}
+
 function horizontalMargins() {
     const spacingAdjustment = (tasks.plasmoid.pluginName === "org.kde.plasma.icontasks") ? (Kirigami.Settings.tabletMode ? 3 : tasks.plasmoid.configuration.iconSpacing) : 1
     return (taskFrame.margins.left + taskFrame.margins.right) * (tasks.vertical ? 1 : spacingAdjustment);
@@ -87,7 +114,7 @@ function preferredMinHeight() {
 }
 
 function preferredMaxHeight() {
-    return 40;
+    return tasks.vertical ? 40 : Math.max(40, tasks.height);
     if (tasks.vertical) {
         let taskPreferredSize = 0;
         if (tasks.iconsOnly) {
@@ -123,7 +150,7 @@ function spaceRequiredToShowText() {
 }
 
 function preferredMinLauncherWidth() {
-    const baseWidth = tasks.vertical ? preferredMinHeight() : (tasks.height > 30 ? 60 : 44);
+    const baseWidth = tasks.vertical ? preferredMinHeight() : (tasks.height > 30 ? Math.round(60 * taskbarScale()) : 44);
     return baseWidth; //Math.min(tasks.height, Kirigami.Units.iconSizes.small * 3);
 
     //return (baseWidth + horizontalMargins())
