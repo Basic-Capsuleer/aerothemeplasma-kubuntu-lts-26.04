@@ -62,6 +62,13 @@ PlasmaCore.Dialog {
     property int cellWidthSide: 139 // Width for sidebar menu items.
     property int cellHeight: iconSize + Kirigami.Units.smallSpacing - Kirigami.Units.smallSpacing/2
 
+    // The "All Programs", "Shut down" and search field boxes were sized for 12 px text (Segoe UI 9).
+    // They now use the system font and grow by however much taller it is, so nothing changes at
+    // the standard size and larger text still fits.
+    property FontMetrics menuFontMetrics: FontMetrics {}
+    property FontMetrics designFontMetrics: FontMetrics { font.family: root.menuFontMetrics.font.family; font.pixelSize: 12 }
+    readonly property int menuTextGrowth: Math.max(0, Math.ceil(menuFontMetrics.height) - Math.ceil(designFontMetrics.height))
+
 	property int cellCount: Plasmoid.configuration.numberRows + faves.getFavoritesCount()
     property bool searching: (searchField.text != "")
     property bool showingAllPrograms: false
@@ -652,7 +659,7 @@ PlasmaCore.Dialog {
 						if(focusAppsView) appsView.focus = true;
 					}
 				}
-				Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium+1
+				Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium + 1 + menuTextGrowth
 
 				KSvg.FrameSvgItem {
 					id: allPBNew
@@ -698,7 +705,6 @@ PlasmaCore.Dialog {
 				Text {
 					id: showingAllProgramsText
 					text: "    All Programs"
-					font.pixelSize: 12
 					anchors.left: arrowDirection.right
 					anchors.leftMargin: Kirigami.Units.mediumSpacing
 					anchors.verticalCenter: parent.verticalCenter
@@ -713,7 +719,6 @@ PlasmaCore.Dialog {
 				Text {
 					id: showingAllProgramsTextBack
 					text: "    Back"
-					font.pixelSize: 12
 					anchors.left: arrowDirection.right
 					anchors.leftMargin: Kirigami.Units.mediumSpacing
 					anchors.verticalCenter: parent.verticalCenter
@@ -734,7 +739,7 @@ PlasmaCore.Dialog {
 				Layout.bottomMargin: 16
 				Layout.alignment: Qt.AlignHCenter
 				Layout.fillWidth: true
-				Layout.preferredHeight: Kirigami.Units.smallSpacing * 7 - Kirigami.Units.smallSpacing
+				Layout.preferredHeight: Kirigami.Units.smallSpacing * 7 - Kirigami.Units.smallSpacing + menuTextGrowth
 				Layout.rightMargin: Plasmoid.configuration.accurateSearchBar ? 17 : Kirigami.Units.largeSpacing
 				Layout.leftMargin: Plasmoid.configuration.accurateSearchBar ? 13 : Kirigami.Units.largeSpacing
 
@@ -1159,7 +1164,7 @@ PlasmaCore.Dialog {
 				id: shutdown
 				objectName: "ShutdownButton"
 				width: shutDownText.implicitWidth + (Kirigami.Units.largeSpacing-1)*2 + 1
-				height: Kirigami.Units.smallSpacing * 6 - 2
+				height: Kirigami.Units.smallSpacing * 6 - 2 + menuTextGrowth
 				size: iconSizeSide
 
 				KeyNavigation.tab: lockScreenDelegate
@@ -1214,7 +1219,6 @@ PlasmaCore.Dialog {
 					id: shutDownText
 					text: i18nd("plasma_lookandfeel_org.kde.lookandfeel", "Shut down")
 
-					font.pixelSize: 12
 					color: searching ? shutdownTextColor : Kirigami.Theme.textColor
 					anchors.horizontalCenter: parent.horizontalCenter
 					anchors.verticalCenter: parent.verticalCenter
