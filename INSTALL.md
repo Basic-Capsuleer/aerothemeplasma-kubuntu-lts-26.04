@@ -103,7 +103,9 @@ Instead of 125% display scaling (which makes the theme's artwork blurry on Wayla
 - System Settings → Text & Fonts → Fonts → *Adjust All Fonts…* → **11** or **12**; *Small* → **10**.
 - Taskbar height **50** px (right-click the taskbar → Show Panel Configuration → Panel Height).
 
-The taskbar, tray, start menu, menus, previews and the UAC window then grow with the font.
+The taskbar, tray, start menu, menus, previews, the clock's calendar and the UAC window then grow
+with the font. **Exception: the clock on the taskbar** has its own font setting and doesn't follow
+the system font; set it by hand (right-click the clock → Configure → its font/size).
 
 ---
 

@@ -52,7 +52,7 @@ work together on Plasma 6.6.6, so the install script downloads nothing.
   arrow grow along.
 - Start menu: "All Programs", "Back", "Shut down", the search field and the profile picture follow
   the system font; the orb sticks out of a shorter taskbar instead of being cut off.
-- Taskbar right-click menu and window previews grow with the font.
+- Taskbar right-click menu, window previews and the clock's calendar pop-up grow with the font.
 - The UAC (password) window, its password field and picture grow with the font.
 
 **Other fixes**
