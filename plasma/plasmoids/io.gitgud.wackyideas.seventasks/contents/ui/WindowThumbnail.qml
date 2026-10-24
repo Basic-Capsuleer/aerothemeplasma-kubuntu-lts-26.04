@@ -299,7 +299,10 @@ MouseArea {
 
                 active: true
                 asynchronous: true
-                sourceComponent: minimized ? appIcon : (KWindowSystem.isPlatformWayland ? (tasks.toolTipOpen ? waylandThumbnail : undefined) : x11Thumbnail)
+                // AeroThemePlasma: on Wayland KWin also streams minimised windows (it renders them
+                // off-screen for the preview), so only X11 needs the icon for minimised windows, as
+                // in KDE's own task manager
+                sourceComponent: KWindowSystem.isPlatformWayland ? (tasks.toolTipOpen ? waylandThumbnail : undefined) : (minimized ? appIcon : x11Thumbnail)
 
                 onLoaded: {
                     if(sourceComponent !== x11Thumbnail) thumbnailRoot.thumbnailHeight = thumbnailLoader.height;
