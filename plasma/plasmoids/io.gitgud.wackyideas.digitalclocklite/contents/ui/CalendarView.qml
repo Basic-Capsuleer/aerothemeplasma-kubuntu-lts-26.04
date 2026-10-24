@@ -97,8 +97,16 @@ PlasmaCore.Dialog {
 
     readonly property bool showAgenda: Plasmoid.configuration.enabledCalendarPlugins.length > 0
 
-    property int _minimumWidth: 336
-    property int _minimumHeight: 247
+    // AeroThemePlasma: the pop-up was designed for the standard 9 pt (12 px) font; with a bigger
+    // system font the pop-up and the month grid grow by the same ratio, so the day numbers fit
+    // (unchanged at the standard size)
+    property FontMetrics systemFontMetrics: FontMetrics {}
+    property FontMetrics designFontMetrics: FontMetrics { font.family: calendar.systemFontMetrics.font.family; font.pixelSize: 12 }
+    // grows at 40% of the font's growth: just enough for the day numbers to fit
+    readonly property real fontScale: 1 + 0.4 * (Math.max(1, systemFontMetrics.height / designFontMetrics.height) - 1)
+
+    property int _minimumWidth: Math.round(336 * fontScale)
+    property int _minimumHeight: Math.round(247 * fontScale)
 
     readonly property int agendaViewWidth: _minimumHeight
     readonly property int monthViewWidth: monthView.showWeekNumbers ? Math.round(_minimumHeight * 1.25) : Math.round(_minimumHeight * 1.125)
@@ -176,8 +184,8 @@ PlasmaCore.Dialog {
 				//The calendar itself, on the left side of the dialog
 				Item {
 					id: cal
-					Layout.preferredWidth: 168
-					Layout.preferredHeight: 150
+					Layout.preferredWidth: Math.round(168 * calendar.fontScale)
+					Layout.preferredHeight: Math.round(150 * calendar.fontScale)
 					Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 					Layout.topMargin: Kirigami.Units.largeSpacing + Kirigami.Units.mediumSpacing
 
