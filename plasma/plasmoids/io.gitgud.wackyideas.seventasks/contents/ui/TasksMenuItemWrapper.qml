@@ -22,7 +22,7 @@ import org.kde.kirigami as Kirigami
 Item {
     id: tasksWrapper
 
-    implicitHeight: Kirigami.Units.smallSpacing*5
+    implicitHeight: tasksMenu.menuItemHeight
     Layout.fillWidth: true
     Layout.preferredHeight: implicitHeight
 

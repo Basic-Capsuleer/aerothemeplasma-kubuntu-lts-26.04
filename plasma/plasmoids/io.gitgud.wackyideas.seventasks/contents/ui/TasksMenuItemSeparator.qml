@@ -23,7 +23,7 @@ Item {
 
     objectName: "menuseparator"
     property var menuText: ""
-    implicitHeight: Kirigami.Units.smallSpacing*5
+    implicitHeight: tasksMenu.menuItemHeight
     Layout.fillWidth: true
     Layout.preferredHeight: implicitHeight
 
@@ -38,7 +38,6 @@ Item {
         }
         height: parent.height
         text: menuText
-        font.pointSize: 9 //9.3
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop
@@ -57,7 +56,6 @@ Item {
         }
         height: parent.height
         text: menuText
-        font.pointSize: 9 //9.3
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop

@@ -58,8 +58,15 @@ PlasmaCore.Dialog {
     property int taskX: 0
     property int taskY: 0
 
-    readonly property int menuItemHeight: Kirigami.Units.smallSpacing*5
-    readonly property int menuWidth: 238
+    // AeroThemePlasma: the menu was designed for the standard 9 pt (12 px) font; with a bigger system
+    // font its rows, width and icons grow by the same ratio (unchanged at the standard size)
+    property FontMetrics systemFontMetrics: FontMetrics {}
+    property FontMetrics designFontMetrics: FontMetrics { font.family: tasksMenu.systemFontMetrics.font.family; font.pixelSize: 12 }
+    readonly property real fontScale: Math.max(1, systemFontMetrics.height / designFontMetrics.height)
+    readonly property int menuItemHeight: Math.round(Kirigami.Units.smallSpacing*5 * fontScale)
+    readonly property int menuWidth: Math.round(238 * fontScale)
+    // 22 px is the next icon size the icon themes have as real images, so icons stay sharp
+    readonly property int menuIconSize: fontScale >= 1.25 ? 22 : Kirigami.Units.iconSizes.small
     readonly property int slide: Kirigami.Units.smallSpacing*3
     property bool finishedAnimating: false
 

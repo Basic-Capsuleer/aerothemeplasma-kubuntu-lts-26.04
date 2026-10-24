@@ -101,7 +101,7 @@ Item {
             leftMargin: Kirigami.Units.smallSpacing/2
             verticalCenter: parent.verticalCenter
         }
-        width: Kirigami.Units.iconSizes.small
+        width: tasksMenu.menuIconSize
         height: width
         opacity: parent.enabled ? 1 : 0.5
         source: iconSource
@@ -119,7 +119,6 @@ Item {
         }
         height: parent.height
         text: menuText
-        font.pointSize: 9 //9.3
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
@@ -139,7 +138,6 @@ Item {
         }
         height: parent.height
         text: menuText
-        font.pointSize: 9 //9.3
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
