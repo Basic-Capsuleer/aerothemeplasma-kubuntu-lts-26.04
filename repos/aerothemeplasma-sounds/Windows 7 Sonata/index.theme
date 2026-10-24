@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Sonata
+Comment=pianos are better
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

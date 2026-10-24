@@ -1,0 +1,297 @@
+/* Compile: sassc style.scss style.css --style compressed */
+/* 9-patch order: top right bottom left */
+
+QCommandLinkButton {
+    border-image: url(:/AeroQt/commandLinkButton/normal.png) 24 5 24 5 stretch;
+	border-width: 24px 5px;
+
+    &:hover {
+	    border-image: url(:/AeroQt/commandLinkButton/hot.png) 24 5 24 5 stretch;
+	}
+	&:pressed {
+	    border-image: url(:/AeroQt/commandLinkButton/pressed.png) 24 5 24 5 stretch;
+	}
+	// &:focus {
+	//     border-image: url(:/AeroQt/commandLinkButton/defaulted.png) 24 5 24 5 stretch;
+	// }
+	&:default {
+	    border-image: url(:/AeroQt/commandLinkButton/defaulted_animating.png) 24 5 24 5 stretch;
+	}
+}
+
+// Aero--Page {
+//     background: white;
+
+//     KTitleWidget {
+// 	    color: #1A3C7A;
+// 	}
+// }
+
+/* Coloured ToolBar (this really ought to be handled by the system style and not have to be done client side) */
+QToolBar {
+    // border: 1px solid rgba(255, 255, 255, 64);
+	// border-radius: 1px;
+
+    border-image: url(:/AeroQt/toolbar/bar-light.png) 1 1 3 1 stretch;
+	border-width: 1px 1px 3px 1px;
+	border-left-width: 0px; border-right-width: 0px;
+
+    &[_Aero_flat="true"] {
+	    // border: 1px solid red;
+		border-image: transparent;
+
+        border-top:		1px solid white;//#f4f7fc;
+		border-bottom:	1px solid #D3DAE8;
+		// border-left:	1px solid #e4e8f5;
+		// border-right:	1px solid #e4e8f5;
+
+        background-color: #E5EAF5;
+	}
+
+
+    &[_Aero_styleclass="blue"] {
+	    border-image: url(:/AeroQt/toolbar/bar-blue.png) 1 1 2 1 stretch;
+		border-width: 1px 1px 2px 1px;
+		border-left-width: 0px; border-right-width: 0px;
+
+        & > QAbstractButton { color: white; }	// TODO: Borealis: replace this with changing the QPalette
+	}
+	&[_Aero_styleclass="azure"] {
+	    border-image: url(:/AeroQt/toolbar/bar-azure.png) 1 1 2 1 stretch;
+		border-width: 1px 1px 2px 1px;
+		border-left-width: 0px; border-right-width: 0px;
+
+        & > QAbstractButton { color: white; }
+	}
+	&[_Aero_styleclass="black"] {
+	    border-image: url(:/AeroQt/toolbar/bar-black.png) 2 3 2 3 stretch;
+		border-width: 2px 3px 2px 3px;
+		border-left-width: 0px; border-right-width: 0px;	// Sometimes you have more than one toolbar next to each other horizontally (eg. Konsole), and having l/r borders would disturb the effect of there being a single unified toolbar
+
+        & > QAbstractButton { color: white; }
+	}
+
+    //
+
+    QAbstractButton {
+	    border-image: url(:/AeroQt/toolbar/Toolbar.BUTTON.NORMAL.png) 4 3 4 3 stretch;
+		border-width: 4px 3px 4px 3px;
+
+        &:hover {
+		    border-image: url(:/AeroQt/toolbar/Toolbar.BUTTON.HOT.png) 4 3 4 3 stretch;
+		}
+		&:pressed {
+		    border-image: url(:/AeroQt/toolbar/Toolbar.BUTTON.PRESSED.png) 4 3 4 3 stretch;
+		}
+	}
+	QToolButton {	// The QAbstractButton styling needs some tweaks to work with QToolButton
+	    padding: 0;
+
+        /* Conditional: Only applies when a QMenu is attached to the button */
+		&[popupMode="MenuButtonPopup"], &[popupMode="InstantPopup"] {
+		    padding-right: 13px; /* Reserves space for the arrow */
+
+            &::menu-button {
+			    border-left: 1px solid transparent;
+				width: 12px;
+				subcontrol-origin: padding;
+				subcontrol-position: center;
+			}
+		}
+	}
+}
+
+/* Window glassy areas */
+
+*[_Aero_transpbg="true"] {
+    QLineEdit,
+	QAbstractScrollArea    /* Multiline edits */
+	{
+	    border-image: url(:/AeroQt/transpbg/entry/normal.png) 4 4 4 4 repeat;
+		border-width: 4px;
+
+        &:hover
+		{
+		    border-image: url(:/AeroQt/transpbg/entry/hover.png) 4 4 4 4 repeat;
+		}
+	}
+
+    QAbstractButton
+	{
+	    border-image: url(:/AeroQt/transpbg/button/normal.png) 3 3 3 3 stretch;
+		border-width: 3px;
+
+        &:hover {
+		    border-image: url(:/AeroQt/transpbg/button/hover.png) 3 3 3 3 stretch;
+		}
+		&:pressed {
+		    border-image: url(:/AeroQt/transpbg/button/pressed.png) 3 3 3 3 stretch;
+		}
+	}
+	QAbstractButton[flat="true"]
+	{
+	    border-image: none;
+
+        &:hover {
+		    border-image: none;
+		}
+		&:pressed {
+		    border-image: none;
+		}
+	}
+
+    QCheckBox
+	{
+	    border: 1px solid transparent;
+		border-image: none;
+
+        // Override default
+		&:hover
+		{
+		    border: 1px solid transparent;
+			border-image: none;
+		}
+		&:pressed
+		{
+		    border: 1px solid transparent;
+			border-image: none;
+		}
+	}
+
+    /* Separator on glass bg. */
+	QFrame[frameShape="4"] { /* horizontal */
+	    border-image: url(:/AeroQt/transpbg/entry/normal.png) 3 2 3 2 stretch;
+		border-width: 3px 2px 3px 2px;
+	}
+	QFrame[frameShape="5"] { /* vertical */
+	    border-image: url(:/AeroQt/transpbg/entry/normal.png) 3 2 3 2 stretch;
+		border-width: 3px 2px 3px 2px;
+	}
+}
+
+/* Ribbons */
+SARibbonWidget[ribbonTheme="2"] {
+    SARibbonBar {
+	       background-color: #dfe9f5;
+	}
+
+    SARibbonStackedWidget {
+	       border-image: url(:/AeroQt/ribbon/stackedwidgetbg.png) 1 1 3 1 stretch;
+		   border-width: 1px 1px 3px 1px;
+	}
+
+    SARibbonTabBar {
+	    margin-top: 2px;
+
+        &::tab {
+		       border-image: url(:/AeroQt/ribbon/tabs/normal.png) 2 5 2 5;
+			   border-width: 2px 5px 2px 5px;  /* The img might be transparent but we need to keep the margins the same as in the selected state so that the tabs don't change width */
+
+            &:selected {
+			    border-image: url(:/AeroQt/ribbon/tabs/active.png) 2 5 2 5;
+			}
+		}
+	}
+
+    SARibbonSeparatorWidget {
+	       border-image: url(:/AeroQt/ribbon/separator.svg.png) 1 1 1 1;
+		   border-width: 1px;
+
+           margin-top: 6px;
+		   margin-bottom: 6px;
+	}
+
+    /*SARibbonApplicationButton {
+	       border-image: url(:/AeroQt/ribbon/fileMenuButton/normal.svg.png) 3 3 2 3;
+		   border-width: 3px 3px 2px 3px;
+
+           color: white;
+	}
+	SARibbonApplicationButton:hover {
+	       border-image: url(:/AeroQt/ribbon/fileMenuButton/hover.svg.png) 3 3 2 3;
+		   border-width: 3px 3px 2px 3px;
+	} */
+	SARibbonApplicationButton::menu-indicator {
+	    /* subcontrol-origin: padding;
+		subcontrol-position: center center;
+		   image: url(:/AeroQt/ribbon/fileMenuButton/icon.svg.png); */
+		   width: 0px;
+	}
+	SARibbonApplicationButton {
+	       min-width: 56;
+		   max-width: 56;
+		   min-height: 22;
+		   max-height: 22;
+		   border-image: url(:/AeroQt/ribbon/fileMenuButton/normalWithIcon.png);
+	}
+	SARibbonApplicationButton:hover {
+	       border-image: url(:/AeroQt/ribbon/fileMenuButton/hoverWithIcon.png);
+	}
+
+    SARibbonPanel {
+	       margin: 5px 5px 2px 5px;
+	}
+
+    SARibbonPanelLabel {
+	       color: #738399;
+	}
+
+    SARibbonCategoryScrollButton {
+	       border-image: url(:/AeroQt/ribbon/moreButton/normal.svg.png) 2 2 2 2;
+		   border-width: 2px 2px 2px 2px;
+	}
+
+    SARibbonToolButton {
+	    &:hover {
+		       border-image: url(:/AeroQt/ribbon/toolButton/hover.svg.png) 4 4 4 4 stretch;
+			   border-width: 4px 4px 4px 4px;
+		}
+		&:pressed, &:checked
+		{
+		       border-image: url(:/AeroQt/ribbon/toolButton/active.svg.png) 4 4 4 4 stretch;
+			   border-width: 4px 4px 4px 4px;
+		}
+		&::separator {
+		       width: 1px;
+			   background: #D69E22;
+		}
+	}
+
+    QAbstractButton::menu-indicator {
+	       image: url(:/AeroQt/ribbon/arrowDown.svg.png);
+	/*    subcontrol-origin: padding;
+	       subcontrol-position: bottom right;*/
+	}
+
+    SARibbonButtonGroupWidget {
+	    spacing: 0px;
+		min-height: 22px;
+
+        @mixin button($pos, $slice) {
+		    border-image: url(":/AeroQt/ribbon/groupWidget/normal#{$pos}.png") $slice stretch;
+			border-width: $slice;
+
+            &:hover {
+			    border-image: url(":/AeroQt/ribbon/groupWidget/hover#{$pos}.png") $slice stretch;
+			}
+			&:pressed, &:checked {
+			    border-image: url(":/AeroQt/ribbon/groupWidget/pressed#{$pos}.png") $slice stretch;
+			}
+		}
+
+        > QToolButton[_Aero_childPosition="first"] {
+		    @include button("Left", 2px 2px 2px 2px);
+		}
+		> QToolButton[_Aero_childPosition="middle"] {
+		    @include button("Middle", 2px 2px 2px 1px);
+		}
+		> QToolButton[_Aero_childPosition="last"] {
+		    @include button("Right", 2px 2px 2px 1px);
+		}
+	}
+
+    /* SARibbonButtonGroupWidget > QToolButton {
+	       border-image: url(:/AeroQt/ribbon/groupWidget/leftRight.svg.png) 3 3 3 3;
+		   border-width: 3px 3px 3px 3px;
+	} */
+}

@@ -1,0 +1,9 @@
+[Domain]
+Name=AeroShell SDDM settings
+Icon=system-lock-screen
+URL=https://gitgud.io/aeroshell/aeroshell-sddm-kcm
+
+[aeroshell.kcmaeroshellsddm.write]
+Name=Write to SDDM config
+Description=Write to an AeroShell SDDM theme configuration
+Policy=auth_admin

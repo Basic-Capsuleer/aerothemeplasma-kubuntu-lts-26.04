@@ -1,0 +1,156 @@
+#!/bin/bash
+# atp-libplasma-check: guards the AeroThemePlasma version of libplasma.
+#
+# Runs at every login (via ~/.config/autostart). When everything is fine it does
+# nothing at all: no window, no notification. It only opens a popup window when:
+#   1. the Aero libplasma has been replaced (for example by an automatic security update),
+#   2. Ubuntu offers a newer libplasma that is waiting because of the hold,
+#   3. the apt hold on the libplasma packages has been removed.
+#
+# Usage:
+#   atp-libplasma-check            run the check (what the login autostart does)
+#   atp-libplasma-check --status   print the check results in the terminal, no popup
+#   atp-libplasma-check --record   remember the currently installed libplasma as "ours"
+#                                  (run this after every rebuild of libplasma)
+#   atp-libplasma-check --demo X   show the popup with example text, X = replaced|update|hold|all
+
+HERE="$HOME/.local/share/atp-libplasma-check"
+EXPECTED="$HERE/expected.conf"
+STEPS="$HERE/update-steps.txt"
+LIBDIR=/usr/lib/x86_64-linux-gnu
+LIBS="libPlasma.so.7 libPlasmaQuick.so.7"
+PKGS="libplasma7 libplasmaquick7 libplasma-dev"
+TITLE="AeroThemePlasma: libplasma check"
+ICON="preferences-desktop-theme-global"
+
+# --- helpers -----------------------------------------------------------------
+
+lib_hash() {    # sha256 of the file a library link currently points to
+    local target
+    target=$(readlink -f "$LIBDIR/$1") || return 1
+    [ -f "$target" ] || return 1
+    sha256sum "$target" | cut -d' ' -f1
+}
+
+installed_version() { dpkg-query -W -f='${Version}' "$1" 2>/dev/null; }
+candidate_version() { apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}'; }
+
+# Which apt run touched libplasma7 after we recorded our version? Prints date + cause.
+find_replacement_cause() {
+    local since="$1"
+    # history.log plus its rotated, compressed older copies; oldest first
+    ls -tr /var/log/apt/history.log* 2>/dev/null | xargs -r zcat -f 2>/dev/null |
+    awk -v since="$since" '
+        /^Start-Date:/ { date = $2 " " $3; cmd = ""; hit = 0 }
+        /^Commandline:/ { sub(/^Commandline: /, ""); cmd = $0 }
+        /^(Install|Upgrade|Reinstall|Downgrade):/ && /libplasma7:/ { hit = 1 }
+        /^End-Date:/ { if (hit && date > since) { last_date = date; last_cmd = cmd } }
+        END { if (last_date != "") print last_date "\t" last_cmd }'
+}
+
+describe_cause() {
+    # Look at the program that ran (first word), not at the package names after it
+    case "${1%% *}" in
+        *unattended-upgrade*) echo "an <b>automatic security update</b> (unattended-upgrades)" ;;
+        *packagekit*)         echo "an update installed through <b>Discover</b> or the update notifier" ;;
+        "")                   echo "an unknown program" ;;
+        *)                    echo "a manual command: <i>$(echo "$1" | cut -c1-80)</i>" ;;
+    esac
+}
+
+# --- --record ----------------------------------------------------------------
+
+if [ "$1" = "--record" ]; then
+    mkdir -p "$HERE"
+    {
+        echo "# Written by atp-libplasma-check --record on $(date '+%Y-%m-%d %H:%M:%S')"
+        echo "RECORDED_AT=\"$(date '+%Y-%m-%d %H:%M:%S')\""
+        echo "HASH_libPlasma=\"$(lib_hash libPlasma.so.7)\""
+        echo "HASH_libPlasmaQuick=\"$(lib_hash libPlasmaQuick.so.7)\""
+        echo "PKG_VERSION=\"$(installed_version libplasma7)\""
+    } > "$EXPECTED"
+    echo "Recorded the current libplasma as the Aero version:"
+    cat "$EXPECTED"
+    exit 0
+fi
+
+# --- collect problems (or demo text) -----------------------------------------
+
+replaced=""; update=""; hold=""
+
+if [ "$1" = "--demo" ]; then
+    case "$2" in replaced|all) replaced="On <b>2026-11-03 06:31</b>, an <b>automatic security update</b> (unattended-upgrades) replaced the Aero libplasma with Ubuntu's version 6.6.6-0ubuntu0.2." ;; esac
+    case "$2" in update|all)   update="Ubuntu offers libplasma <b>6.6.7-0ubuntu0.1</b>; you have <b>6.6.6-0ubuntu0.1</b>." ;; esac
+    case "$2" in hold|all)     hold="Not on hold: <b>libplasma7 libplasmaquick7</b>" ;; esac
+else
+    if [ ! -f "$EXPECTED" ]; then
+        replaced="The check has no record of the Aero libplasma yet. Run <b>atp-libplasma-check --record</b> right after installing it."
+    else
+        . "$EXPECTED"
+        now_main=$(lib_hash libPlasma.so.7)
+        now_quick=$(lib_hash libPlasmaQuick.so.7)
+        if [ "$now_main" != "$HASH_libPlasma" ] || [ "$now_quick" != "$HASH_libPlasmaQuick" ]; then
+            cause=$(find_replacement_cause "$RECORDED_AT")
+            if [ -n "$cause" ]; then
+                when=$(cut -f1 <<<"$cause"); how=$(cut -f2- <<<"$cause")
+                replaced="On <b>$when</b>, $(describe_cause "$how") replaced the Aero libplasma with Ubuntu's version $(installed_version libplasma7)."
+            else
+                replaced="The Aero libplasma files have changed since $RECORDED_AT, but Ubuntu's update history doesn't say why (maybe a manual rebuild or reinstall)."
+            fi
+        fi
+    fi
+
+    inst=$(installed_version libplasma7); cand=$(candidate_version libplasma7)
+    if [ -n "$cand" ] && [ "$cand" != "(none)" ] && dpkg --compare-versions "$cand" gt "$inst"; then
+        update="Ubuntu offers libplasma <b>$cand</b>; you have <b>$inst</b>."
+    fi
+
+    held=$(apt-mark showhold 2>/dev/null)
+    missing=""
+    for p in $PKGS; do grep -qx "$p" <<<"$held" || missing="$missing $p"; done
+    [ -n "$missing" ] && hold="Not on hold:<b>$missing</b>"
+fi
+
+# --- --status: report in the terminal ----------------------------------------
+
+if [ "$1" = "--status" ]; then
+    strip() { sed -e 's/<[^>]*>//g'; }
+    echo "Aero libplasma intact : $([ -z "$replaced" ] && echo yes || echo "NO - $(strip <<<"$replaced")")"
+    echo "Update waiting        : $([ -z "$update" ] && echo no || strip <<<"$update")"
+    echo "Hold in place         : $([ -z "$hold" ] && echo yes || echo "NO - $(strip <<<"$hold")")"
+    exit 0
+fi
+
+# --- nothing wrong: stay completely silent -----------------------------------
+
+[ -z "$replaced$update$hold" ] && exit 0
+
+# --- build the popup text -------------------------------------------------------
+
+msg=""
+if [ -n "$replaced" ]; then
+    msg+="<h3>The Aero libplasma has been replaced</h3>"
+    msg+="<p>$replaced</p>"
+    msg+="<p>Parts of the theme (dialogs, popups, shadows) may look wrong until you rebuild it.</p>"
+fi
+if [ -n "$update" ]; then
+    msg+="<h3>A Plasma update is waiting</h3>"
+    msg+="<p>$update</p>"
+    msg+="<p>Your theme is safe: the update is on hold. When you have time, follow the update steps.</p>"
+fi
+if [ -n "$hold" ]; then
+    msg+="<h3>The protective hold is missing</h3>"
+    msg+="<p>$hold</p>"
+    msg+="<p>Ubuntu (including automatic security updates) can now replace the Aero libplasma without asking.</p>"
+fi
+msg+="<p>This message appears at every login until it's resolved.</p>"
+
+# Give the desktop a moment to finish starting when run at login
+[ "$1" = "--login" ] && sleep 15
+
+if kdialog --title "$TITLE" --icon "$ICON" \
+        --yes-label "Show the steps" --no-label "Close" \
+        --warningyesno "$msg"; then
+    kdialog --title "$TITLE: update steps" --icon "$ICON" --textbox "$STEPS" 820 640
+fi
+exit 0

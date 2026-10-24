@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=AeroThemePlasma libplasma check
+Comment=Warns at login if the Aero libplasma was replaced or a Plasma update is waiting; silent otherwise
+Exec=@HOME@/.local/share/atp-libplasma-check/atp-libplasma-check --login
+Icon=preferences-desktop-theme-global
+Terminal=false
+X-KDE-autostart-phase=2

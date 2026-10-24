@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Characters
+Comment=MCU type shit
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

@@ -1,0 +1,10 @@
+{
+    "KPlugin": {
+        "Name": "Aero",
+        "Description": "Tweak the Aero theme",
+        "Icon": "preferences-desktop-plasma-theme",
+        "Category": "appearance",
+        "Id": "aerotheme"
+    },
+    "X-KDE-System-Settings-Parent-Category": "appearance"
+}

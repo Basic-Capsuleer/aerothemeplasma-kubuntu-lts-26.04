@@ -1,0 +1,18 @@
+/* Dark mode address bar: Geckium only darkens the field while you're not typing in it (black,
+   white text); while typing it falls back to the light colours (white, black text). Give both
+   states the same dark grey with white text. The magnifier (search) icon is a dark-grey image
+   made for a white field, so brighten it to about the star icon's tone. */
+@media (prefers-color-scheme: dark) {
+  :root[forceColorizeAddressBar=true][customthememode=geckium] {
+    --default-urlbar-background-color: #333333;
+    --default-urlbar-focused-background-color: #333333;
+    --urlbar-focused-color: white !important;
+  }
+  :root[forceColorizeAddressBar=true][customthememode=geckium] #identity-box[pageproxystate=invalid] #identity-icon {
+    filter: brightness(1.7);
+  }
+}
+
+/* Don't show the suggestion list under the address bar (its background stayed white in dark
+   mode). Autofill in the address bar itself (e.g. "you" -> "youtube.com") keeps working. */
+.urlbarView { display: none !important; }

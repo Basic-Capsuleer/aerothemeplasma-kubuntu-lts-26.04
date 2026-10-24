@@ -1,6 +1,9 @@
 #!/bin/bash
 CUR_DIR=${PWD}
 
+# This fork includes every component (frozen at versions that work on Kubuntu 26.04 LTS with
+# Plasma 6.6.6) in repos/, so nothing is downloaded: each part is built from its folder there.
+
 SU_CMD=sudo
 if [[ -z "$(command -v $SU_CMD)" ]]; then
     SU_CMD=doas
@@ -21,34 +24,27 @@ if [[ "$(command -v dnf)" ]]; then # Automatically change for Fedora
     UAC_LIBEXEC_DIR=libexec/kf6
 fi
 
-mkdir -p repos
 mkdir -p manifest
-cd repos
+cd repos || exit 1
 
 # libplasma last
-git clone https://gitgud.io/aeroshell/libplasma.git libplasma
-cd libplasma
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -B build . || exit 1
+cd libplasma || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/libplasma_install_manifest.txt"
 cd "$CUR_DIR/repos"
 
 # uac-polkit-agent
-git clone https://gitgud.io/aeroshell/uac-polkit-agent.git uac-polkit-agent
-cd uac-polkit-agent
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBEXECDIR=$UAC_LIBEXEC_DIR -B build . || exit 1
+cd uac-polkit-agent || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBEXECDIR=$UAC_LIBEXEC_DIR -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/uac-polkit-agent_install_manifest.txt"
 cd "$CUR_DIR/repos"
 
 # SMOD
-git clone https://gitgud.io/aeroshell/smod.git smod
-cd smod
-git pull
+cd smod || exit 1
 bash install.sh $@
 cp build/install_manifest.txt "$CUR_DIR/manifest/smod_install_manifest.txt"
 cp smodglow/build-wl/install_manifest.txt "$CUR_DIR/manifest/smodglow_install_manifest.txt"
@@ -60,10 +56,8 @@ fi
 cd "$CUR_DIR/repos"
 
 # Aeroshell Workspace
-git clone https://gitgud.io/aeroshell/aeroshell-workspace.git aeroshell-workspace
-cd aeroshell-workspace
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -B build . || exit 1
+cd aeroshell-workspace || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 $SU_CMD update-mime-database "/usr/local/share/mime"
@@ -71,16 +65,14 @@ cp build/install_manifest.txt "$CUR_DIR/manifest/aeroshell-workspace_install_man
 cd "$CUR_DIR/repos"
 
 # Aeroshell KWin
-git clone https://gitgud.io/aeroshell/aeroshell-kwin-components.git aeroshell-kwin-components
-cd aeroshell-kwin-components
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DKWIN_BUILD_WAYLAND=ON -B build . || exit 1
+cd aeroshell-kwin-components || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DKWIN_BUILD_WAYLAND=ON -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/aeroshell-kwin-components_install_manifest.txt"
 if [[ ! "$*" == *"--skip-x11"* ]]
 then
-    cmake -DCMAKE_INSTALL_PREFIX=/usr -DKWIN_BUILD_WAYLAND=OFF -DKWIN_INSTALL_MISC=OFF -B build_x11 . || exit 1
+    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DKWIN_BUILD_WAYLAND=OFF -DKWIN_INSTALL_MISC=OFF -B build_x11 . || exit 1
     cmake --build build_x11 || exit 1
     $SU_CMD cmake --install build_x11 || exit 1
     cp build_x11/install_manifest.txt "$CUR_DIR/manifest/aeroshell-kwin-components-x11_install_manifest.txt"
@@ -88,30 +80,24 @@ fi
 cd "$CUR_DIR/repos"
 
 # Aeroshell SDDM KCM
-git clone https://gitgud.io/aeroshell/aeroshell-sddm-kcm.git aeroshell-sddm-kcm
-cd aeroshell-sddm-kcm
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -B build . || exit 1
+cd aeroshell-sddm-kcm || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/aeroshell-sddm-kcm_install_manifest.txt"
 cd "$CUR_DIR/repos"
 
 # Aerothemeplasma icons
-git clone https://gitgud.io/aeroshell/atp/aerothemeplasma-icons aerothemeplasma-icons
-cd aerothemeplasma-icons
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -B build . || exit 1
+cd aerothemeplasma-icons || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/icons_install_manifest.txt"
 cd "$CUR_DIR/repos"
 
 # Aerothemeplasma sounds
-git clone https://gitgud.io/aeroshell/atp/aerothemeplasma-sounds aerothemeplasma-sounds
-cd aerothemeplasma-sounds
-git pull
-cmake -DCMAKE_INSTALL_PREFIX=/usr -B build . || exit 1
+cd aerothemeplasma-sounds || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/sounds_install_manifest.txt"
@@ -119,13 +105,13 @@ cd "$CUR_DIR/repos"
 
 # Aerothemeplasma
 cd "$CUR_DIR"
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBEXECDIR=$LIBEXEC_DIR -B build . || exit 1
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBEXECDIR=$LIBEXEC_DIR -B build . || exit 1
 cmake --build build || exit 1
 $SU_CMD cmake --install build || exit 1
 cp build/install_manifest.txt "$CUR_DIR/manifest/aerothemeplasma_install_manifest.txt"
 if [[ ! "$*" == *"--skip-x11"* ]]
 then
-    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_LIBEXECDIR=$LIBEXEC_DIR -DINSTALL_X11_COMPONENTS=ON -B build_x11 . || exit 1
+    cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBEXECDIR=$LIBEXEC_DIR -DINSTALL_X11_COMPONENTS=ON -B build_x11 . || exit 1
     cmake --build build_x11 || exit 1
     $SU_CMD cmake --install build_x11 || exit 1
     cp build_x11/install_manifest.txt "$CUR_DIR/manifest/aerothemeplasma-x11_install_manifest.txt"

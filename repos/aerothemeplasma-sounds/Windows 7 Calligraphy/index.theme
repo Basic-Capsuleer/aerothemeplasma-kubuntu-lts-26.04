@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Calligraphy
+Comment=writing but for nerds
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

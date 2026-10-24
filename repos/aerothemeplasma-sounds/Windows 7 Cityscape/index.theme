@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Cityscape
+Comment=would rather city escape, ngl
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

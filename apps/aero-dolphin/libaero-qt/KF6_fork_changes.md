@@ -1,0 +1,3 @@
+* `KHamburgerMenu` should create a text button
+* ~~Some W7 toolbars combine `Qt::ToolButtonIconOnly` buttons and `Qt::ToolButtonTextOnly` dropdowns, but Qt only lets you set this per-toolbar. Qt hides the button arrow on the latter.~~ Just don't set an icon for the actions that should be text-only buttons, and they will be text-only. But Qt needs to be modified to display the dropdown arrow besides the text in text-only QToolButtons. [Edit: possibly use KToolBarPopupAction or KToolBarLabelAction?]
+* Alter QMainWindow to natively support adding widgets *above* the menu bar. This is not possible in the [current layout model](https://doc.qt.io/qt-6/images/mainwindowlayout.png)

@@ -1,372 +1,272 @@
-# Installation
+# Installation (Kubuntu 26.04 LTS, Wayland)
 
-## TABLE OF CONTENTS
+Only for **Kubuntu 26.04 LTS with Plasma 6.6.6** (check with `apt-cache policy libplasma7`).
+No support; see the warning in [README.md](README.md). Make a **Timeshift snapshot** first.
 
-1. [Prerequisites](#preq)
-2. [Migration notice](#migration)
-3. [Getting started](#started)
-4. [Optional](#optional)
-5. [GTK](#gtk)
-6. [Uninstalling AeroThemePlasma (old)](#uninstall_old)
+Commands starting with `sudo` ask for your password. Run them one at a time.
 
-## Prerequisites <a name="preq"></a>
+---
 
-It's necessary to have KDE Plasma already installed on your system (plasma-workspace and plasma-desktop) in order to get all the Plasma-specific dependencies for AeroThemePlasma.
+## Part 1: the theme
 
-Before installing AeroThemePlasma, it's important to know which display server you're running on (Wayland or X11). This can be checked using Plasma's Info Center page in the settings. It's recommended, **but optional**, to run AeroThemePlasma on X11 for now, as it's generally the more stable and feature rich experience (certain restrictions on the Wayland session make some effects and features impossible to achieve, this should hopefully be addressed in the future).
-
-### Arch Linux
-
-Required packages:
+### 1. Bring the system up to date
 
 ```bash
-pacman -S git cmake extra-cmake-modules ninja curl unzip qt6-virtualkeyboard qt6-multimedia qt6-5compat qt6-wayland plasma-wayland-protocols plasma5support kvantum sddm sddm-kcm base-devel plasma-nm plasma-pa plasma-workspace plasma-desktop
+sudo apt update && sudo apt full-upgrade
 ```
 
-Since Plasma 6.4, the X11 session has been separated from the main codebase. On Arch Linux, additional dependencies for X11 include:
+Reboot afterwards.
 
-- `kwin-x11`
-- `plasma-x11-session`
+### 2. Build packages and Kvantum
 
-KSysGuard has been officially deprecated by KDE, however an unofficial [port](https://github.com/zvova7890/ksysguard6) exists for Qt6, which can be installed using the [AUR](https://aur.archlinux.org/packages/ksysguard6-git) package on Arch-based distros.
-
-### Note: Dependencies for other distros besides Arch Linux have been provided by contributors and aren't updated frequently, which may result in incorrect or missing dependencies.
-
-### Fedora KDE
-
-Required Packages:
+The packages needed to build all parts (worked out from the theme's own build files):
 
 ```bash
-dnf install gcc gcc-c++ cmake make extra-cmake-modules plasma-workspace-devel libksysguard-devel unzip kvantum qt6-qtmultimedia-devel qt6-qt5compat-devel libplasma-devel qt6-qtbase-devel qt6-qtwayland-devel plasma-activities-devel kf6-kpackage-devel kf6-kglobalaccel-devel qt6-qtsvg-devel wayland-devel plasma-wayland-protocols kf6-ksvg-devel kf6-kcrash-devel kf6-kguiaddons-devel kf6-kcmutils-devel kf6-kio-devel kdecoration-devel kf6-ki18n-devel kf6-knotifications-devel kf6-kirigami-devel kf6-kiconthemes-devel cmake gmp-ecm-devel kf5-plasma-devel libepoxy-devel kwin-devel kf6-karchive kf6-karchive-devel plasma-wayland-protocols-devel qt6-qtbase-private-devel qt6-qtbase-devel kf6-knewstuff-devel kf6-knotifyconfig-devel kf6-attica-devel kf6-krunner-devel kf6-kdbusaddons-devel kf6-sonnet-devel plasma5support-devel plasma-activities-stats-devel polkit-qt6-1-devel qt-devel libdrm-devel kf6-kitemmodels-devel kf6-kstatusnotifieritem-devel kf6-frameworkintegration-devel
+sudo apt install build-essential cmake ninja-build pkgconf extra-cmake-modules qt6-base-dev qt6-declarative-dev qt6-svg-dev qt6-tools-dev qt6-5compat-dev qt6-wayland-dev libkf6archive-dev libkf6attica-dev libkf6auth-dev libkf6codecs-dev libkf6colorscheme-dev libkf6config-dev libkf6configwidgets-dev libkf6coreaddons-dev libkf6crash-dev libkf6dbusaddons-dev libkf6globalaccel-dev libkf6guiaddons-dev libkf6i18n-dev libkf6iconthemes-dev libkf6itemmodels-dev libkf6kcmutils-dev libkf6kio-dev libkf6newstuff-dev libkf6notifications-dev libkf6notifyconfig-dev libkf6package-dev libkf6qqc2desktopstyle-dev libkf6runner-dev libkf6service-dev libkf6sonnet-dev libkf6statusnotifieritem-dev libkf6style-dev libkf6svg-dev libkf6widgetsaddons-dev libkf6windowsystem-dev libkf6xmlgui-dev libkirigami-dev libplasma-dev libplasma5support-dev libplasmaactivities-dev libplasmaactivitiesstats-dev plasma-wayland-protocols plasma-workspace-dev kwin-dev libkdecorations3-dev libksysguard-dev libpolkit-qt6-1-dev libwayland-dev wayland-protocols libepoxy-dev libdrm-dev qml6-module-org-kde-kirigamiaddons-sounds
 ```
 
-On Fedora, additional dependencies for X11 include:
-
-- `kwin-x11`
-- `kwin-x11-devel`
-
-### openSUSE Leap / Tumbleweed
-
-Required packages:
+**Kvantum must be installed before the theme.** The theme sets the application style to
+`kvantum`; if Kvantum is missing at that moment, Plasma quietly saves Breeze instead and windows
+such as the password (UAC) dialog look wrong:
 
 ```bash
-zypper install cmake gcc gcc-c++ gmp-ecm-devel kdecoration6-devel kf6-attica-devel kf6-extra-cmake-modules kf6-karchive-devel kf6-kauth-devel kf6-kbookmarks-devel kf6-kcmutils-devel kf6-kcodecs-devel kf6-kcolorscheme-devel kf6-kcompletion-devel kf6-kconfig-devel kf6-kconfigwidgets-devel kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdbusaddons-devel kf6-kglobalaccel-devel kf6-kguiaddons-devel kf6-ki18n-devel kf6-kiconthemes-devel kf6-kio-devel kf6-kirigami-devel kf6-kitemviews-devel kf6-kjobwidgets-devel kf6-knewstuff-devel kf6-knotifications-devel kf6-knotifyconfig-devel kf6-kpackage-devel kf6-krunner-devel kf6-kservice-devel kf6-ksvg-devel kf6-kwidgetsaddons-devel kf6-kwindowsystem-devel kf6-kxmlgui-devel kf6-qqc2-desktop-style-devel kf6-solid-devel kf6-sonnet-devel knotifications-devel kwin6-devel kwin6-x11-devel libepoxy-devel libksysguard6-devel libplasma6-devel libpolkit-qt6-1-devel make ninja plasma-wayland-protocols plasma5support6-devel plasma6-activities-devel plasma6-activities-stats-devel plasma6-workspace-devel qt6-base-devel qt6-gui-private-devel qt6-qt5compat-devel qt6-quick-devel qt6-quickcontrols2-devel qt6-quicktest-devel qt6-quickwidgets-devel qt6-svg-devel qt6-uitools-devel qt6-wayland-devel qt6-waylandclient-private-devel
+sudo apt install qt6-style-kvantum qt5-style-kvantum
 ```
 
-In openSUSE, additional dependencies for X11 include:
-
-- `kwin6-x11-devel`
-
-### Ubuntu 25.10
+### 3. Download this repository
 
 ```bash
-apt install build-essential cmake ninja-build curl libqt6virtualkeyboard6 libqt6multimedia6 libqt6core5compat6 libplasma5support6 libkdecorations3-dev libkf6colorscheme-dev libkf6i18n-dev libkf6iconthemes-dev libkf6kcmutils-dev libkirigami-dev libkf6kio-dev libkf6notifications-dev libkf6svg-dev libkf6crash-dev libkf6globalaccel-dev libplasma-dev libplasmaactivities-dev libxcb-composite0-dev libxcb-randr0-dev libxcb-shm0-dev libxcb-damage0-dev libepoxy-dev libqt6svg6-dev kwin-dev plasma-wayland-protocols libkf5qqc2desktopstyle-dev libkf6qqc2desktopstyle-dev libplasma5support-dev libkf6auth-dev libkf6newstuff-dev libkf6notifyconfig-dev libkf6attica-dev libkf6runner-dev libkf6dbusaddons-dev libkf6sonnet-dev libkf6xmlgui-dev libkf6coreaddons-dev libkf6widgetsaddons-dev libkf6guiaddons-dev qt6-base-dev qt6-5compat-dev qml-module-org-kde-qqc2desktopstyle libplasmaactivitiesstats-dev plasma-workspace-dev libkf6statusnotifieritem-dev qml-module-org-kde-kirigami-addons-sounds qml6-module-org-kde-kirigamiaddons-sounds
+cd ~
+git clone https://github.com/Basic-Capsuleer/aerothemeplasma-kubuntu-lts-26.04.git
 ```
 
-On Ubuntu, additional dependencies for X11 include:
+### 4. Run the install script
 
-- `kwin-x11`
-- `kwin-x11-dev`
-
-## Migration notice <a name="migration"></a>
-
-AeroThemePlasma has moved to an installation method based on CMake, meant to simplify the entire process, as well as make it easier for distro packaging in the future. The old install scripts are deprecated and no longer work. It's highly recommended to first uninstall the old instance of AeroThemePlasma following these steps, **before pulling in new changes from this repo**:
-
-1. Run the uninstall script:
+It builds and installs all parts from the `repos/` folder (nothing is downloaded). It takes a
+while and asks for your password itself (no `sudo` in front):
 
 ```bash
-$ bash migration-uninstall.sh
+cd ~/aerothemeplasma-kubuntu-lts-26.04
+LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec UAC_LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec bash install.sh --skip-x11
 ```
 
-2. To undo the font rendering modifications, delete the `~/.config/fontconfig/fonts.conf` file provided by the previous versions of ATP.
-3. Remove the line `QML_DISABLE_DISTANCEFIELD=1` from `/etc/environment`
+Wait until it prints `Done.`
 
-It's advisable to also consult [Uninstalling AeroThemePlasma (old)](#uninstall_old) for more details. 
+### 5. Protect the Aero libplasma
 
-## Getting started <a name="started"></a>
-
-### Arch Linux 
-
-The following packages are now on the AUR:
-
-```
-aerothemeplasma-desktop-git
-aerothemeplasma-desktop-x11-git
-aerothemeplasma-icons-git
-aerothemeplasma-sounds-git
-aeroshell-workspace-git
-aeroshell-kwin-components-x11-git
-aeroshell-kwin-components-git
-aeroshell-smodglow-x11-git
-aeroshell-smod-git
-aeroshell-libplasma-git
-uac-polkit-agent-git 
-```
-
-They can be installed using any AUR helper of your choice: 
+Ubuntu updates (including automatic security updates and Discover) would otherwise replace the
+theme's libplasma with Ubuntu's own. The hold script puts it (and Aero Dolphin's packages, part 2)
+on hold:
 
 ```bash
-yay -S aerothemeplasma-desktop-x11 uac-polkit-agent aerothemeplasma-desktop aeroshell-libplasma aeroshell-workspace aeroshell-kwin-components aeroshell-smod aeroshell-smodglow-x11 aerothemeplasma-sounds aerothemeplasma-icons
+sh ~/aerothemeplasma-kubuntu-lts-26.04/tools/atp-hold.sh
 ```
 
-If you've previously installed ATP from source, it's likely that you will be met with errors on installation as a result of file conflicts on your filesystem. It's recommended to uninstall ATP from source before moving to the AUR packages. 
-
-### From source 
-
-To download this repository, clone it with `git`:
+Then install the login check: completely silent when all is well; it only shows a popup when the
+Aero libplasma was replaced, Ubuntu offers a newer one, or the hold is missing. Its "Show the
+steps" button explains what to do. No sudo needed:
 
 ```bash
-$ git clone https://gitgud.io/wackyideas/aerothemeplasma.git aerothemeplasma
-$ cd aerothemeplasma
+SRC=~/aerothemeplasma-kubuntu-lts-26.04/tools/atp-libplasma-check
+D=~/.local/share/atp-libplasma-check
+mkdir -p "$D" ~/.config/autostart
+install -m 755 "$SRC/atp-libplasma-check" "$D/"
+install -m 644 "$SRC/update-steps.txt" "$D/"
+sed "s|@HOME@|$HOME|" "$SRC/atp-libplasma-check.desktop" > ~/.config/autostart/atp-libplasma-check.desktop
+"$D/atp-libplasma-check" --record
 ```
 
-It's highly recommended to use git for downloading AeroThemePlasma as updating becomes much easier.
+`--record` remembers the installed libplasma as "the Aero version"; only run it right after
+(re)building libplasma. `"$D/atp-libplasma-check" --status` shows the results in the terminal.
 
-Run the following script:
+### 6. Apply the theme and settings
 
-```sh
-$ bash install.sh [--skip-x11] # --skip-x11 to skip building X11 components
-``` 
+1. Choose the Windows 7 design in Kvantum:
+   ```bash
+   kvantummanager --set Windows7Aero
+   ```
+2. Apply the global theme **AeroThemePlasma** (System Settings → Colours & Themes → Global Theme),
+   or follow the theme's welcome program.
+3. Check System Settings → Colours & Themes → Application Style is **kvantum**.
+4. Switch on the two KWin scripts the show desktop button needs (the welcome program misses them):
+   ```bash
+   kwriteconfig6 --file kwinrc --group Plugins --key minimizeallEnabled true
+   kwriteconfig6 --file kwinrc --group Plugins --key smodpeekscriptEnabled true
+   qdbus6 org.kde.KWin /KWin reconfigure
+   ```
+5. **Log out and back in.**
 
-**NOTE:** The `--ninja` argument has been replaced for `CMAKE_GENERATOR`. Set `CMAKE_GENERATOR=Ninja` before running the script if you wish to use Ninja instead. Like so:
+### 7. Bigger but sharp (optional; this is what the fixes are made for)
 
-```sh
-$ CMAKE_GENERATOR=Ninja bash install.sh # pass any other arguments after this
-```
+Instead of 125% display scaling (which makes the theme's artwork blurry on Wayland):
+- Display scaling **100%** on all screens (System Settings → Display Configuration).
+- System Settings → Text & Fonts → Fonts → *Adjust All Fonts…* → **11** or **12**; *Small* → **10**.
+- Taskbar height **50** px (right-click the taskbar → Show Panel Configuration → Panel Height).
 
-This will clone every repository needed for AeroThemePlasma and build everything from source.
+The taskbar, tray, start menu, menus, previews and the UAC window then grow with the font.
 
-You can also run the install script like this:
+---
+
+## Part 2: Aero Dolphin (optional)
+
+The file manager in the Windows 7 Explorer look. It **replaces Ubuntu's Dolphin**.
+
+Note: it is KDE's Dolphin development version of 23 May 2026 (later Dolphin 26.08), labelled
+25.12.3, plus the Aero changes and three fixes from this fork. It works with Ubuntu 26.04's KDE
+Frameworks 6.24.
+
+### 1. Extra build packages
 
 ```bash
-$ chmod +x install.sh && ./install.sh 
+sudo apt install libkf6parts-dev libkf6textwidgets-dev libkf6baloo-dev libbaloowidgets-dev libkf6filemetadata-dev qt6-multimedia-dev
 ```
 
-**NOTE:** If you happen to experience font rendering issues with HiDPI in QML applications after logging in, open the file named ``aerothemeplasmarc`` within ``~/.config/``, and add the following contents into it:
+### 2. Build and install libAeroQt (first)
 
-```ini
-[General]
-qmlDisableDistanceField=0
-```
-
-Make sure to not accidentally delete any other already existing stuff inside the file. Afterwards, restart your session and you should see your font look normal again.
-
-# NOTE FOR OTHER DISTROS
-
-The script relies on `LIBEXEC_DIR` and `UAC_LIBEXEC_DIR` in order to determine the location of `/usr/$LIBEXEC_DIR/plasma-dbus-run-session-if-needed` and `/usr/$UAC_LIBEXEC_DIR/polkit-kde-authentication-agent-1` respectively. By default, both are set to `lib`. If you're installing ATP on a distribution where this is different, such as Fedora, these values need to be set to the appropriate values for your specific distribution. For example, on Fedora, `LIBEXEC_DIR` should be `libexec`, and `UAC_LIBEXEC_DIR` should be `libexec/kf6`:
+It also adds an "Aero" page to System Settings and an extra application style; neither changes
+anything by itself.
 
 ```bash
-$ LIBEXEC_DIR=libexec UAC_LIBEXEC_DIR=libexec/kf6 bash install.sh --ninja
+cd ~/aerothemeplasma-kubuntu-lts-26.04/apps/aero-dolphin/libaero-qt
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build .
+cmake --build build -j$(nproc)
+sudo cmake --install build
 ```
 
-Additionally, for distros that don't ship the X11 version of KWin, pass the argument `--skip-x11` to the install script in order to avoid building components that depend on X11. 
-
-The script will ask for admin privileges for file installation. Do **NOT** run any of the provided install scripts with sudo/doas or as root.
-
-**It's highly recommended** to keep the generated build files, so uninstalling AeroThemePlasma and its dependencies can be done using `sudo make uninstall` or `sudo ninja uninstall` in each build directory. A backup of all `install_manifest.txt` files (that list all files that have been installed on the system) is stored in the `manifest` folder.
-
-### Updating AeroThemePlasma
-
-Update and do `git pull` on the cloned repository to get new changes:
+### 3. Build and install Aero Dolphin
 
 ```bash
-$ cd /path/to/aerothemeplasma
-$ git pull
+cd ~/aerothemeplasma-kubuntu-lts-26.04/apps/aero-dolphin/dolphin-aero
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -B build .
+cmake --build build -j$(nproc)
+sudo cmake --install build
 ```
 
-Re-run the install script as described in [Getting started](#started). The script will automatically pull changes for all cloned repositories and rebuild them. In case something needs to be rebuilt completely, simply delete the repository folder causing the build error, and re-run the install script.
-
-When doing a full system upgrade, KWin effects and `libplasma` modifications tend to stop working. Re-running the install script after a full system upgrade is required for them to work again (assuming no breaking upstream changes happen).
-
-### Uninstalling AeroThemePlasma
-
-Uninstalling AeroThemePlasma can be done by running the following script:
+Then run the hold script again (it also holds `dolphin`, `dolphin-data`, `dolphin-doc` and
+`libdolphinvcs6`, so Ubuntu updates don't overwrite it):
 
 ```bash
-$ bash uninstall.sh
+sh ~/aerothemeplasma-kubuntu-lts-26.04/tools/atp-hold.sh
 ```
 
-This will go through almost every build directory and run `sudo make uninstall` or `sudo ninja uninstall` in those directories. After this, the `libplasma` package should be reinstalled using your distro's package manager. 
+To go back to Ubuntu's Dolphin:
+`sudo apt-mark unhold dolphin dolphin-data dolphin-doc libdolphinvcs6` and
+`sudo apt install --reinstall dolphin dolphin-data dolphin-doc libdolphinvcs6`.
+
+### 4. Settings
+
+- **One seamless glass header** (no line under the title bar): System Settings → Colours & Themes
+  → Window Decorations → SMOD → edit → window-specific overrides → add: type **window class**,
+  pattern **`dolphin`**, tick **Hide inner border** → Apply.
+- **Bigger toolbar icons:** right-click an empty spot in Dolphin's toolbar → **Icon Size** → **22**.
+  (The same works in Gwenview and other KDE programs.)
+
+---
+
+## Part 3: LibreWolf in the Windows 7 / old Chrome look (optional)
+
+Uses two add-ons recommended by AeroThemePlasma: [Geckium](https://github.com/Neo-Kitchenfox/Geckium)
+(old Chrome look) and [Aero UserChrome](https://gitgud.io/souris/aero-userchrome) (Windows 7 glass
+frame). The files from this fork are in `extras/librewolf/`.
+
+**Why not Geckium's own instructions:** they replace the browser's startup config file, but
+LibreWolf uses that same mechanism for **all its privacy settings**. Either Geckium never starts,
+or LibreWolf silently loses its privacy settings. Here Geckium's loader goes into LibreWolf's own
+user file instead, and only the startup sandbox is switched off.
+
+> [!CAUTION]
+> With the sandbox off, Geckium's scripts run with full browser rights. Only use Geckium from its
+> official page.
+
+### 1. Install LibreWolf
 
 ```bash
-# On Arch Linux
-$ sudo pacman -S libplasma
+sudo apt update && sudo apt install extrepo -y
+sudo extrepo enable librewolf && sudo extrepo update librewolf
+sudo apt update && sudo apt install librewolf -y
 ```
 
-### Fonts 
+Start LibreWolf once and close it again (it creates its profile folder).
 
-On Arch Linux, use [this script](https://gitgud.io/aeroshell/aeroshell-workspace/-/blob/Plasma/6.6/scripts/install_fonts_arch.sh) to extract fonts and install them as an Arch package from a valid Windows 7 ISO. A 32-bit Windows 7 ISO is recommended for faster download speeds.
+### 2. Download Geckium and Aero UserChrome
 
-## Optional <a name="optional"></a>
-
-1. For Wine users it's recommended to install the [VistaVG Ultimate](https://www.deviantart.com/vishal-gupta/art/VistaVG-Ultimate-57715902) msstyles theme.
-2. Add the following to `~/.bashrc` to get bash to look more like the command prompt on Windows:
+Tested with Geckium 1.19.7 and Aero UserChrome 2025.04.12:
 
 ```bash
-PS1='C:${PWD//\//\\\\}> '
-
-echo -e "Microsoft Windows [Version 6.1.7600]\nCopyright (c) 2009 Microsoft Corporation.  All rights reserved.\n"
+mkdir -p ~/Downloads/atp-librewolf/geckium ~/Downloads/atp-librewolf/aero-userchrome
+cd ~/Downloads/atp-librewolf
+curl -L -o geckium/Geckium_Public_Beta_1.19.7.zip https://github.com/Neo-Kitchenfox/Geckium/releases/download/b0.20.21.2/Geckium_Public_Beta_1.19.7.zip
+curl -L -o aero-userchrome/Release-2025.04.12.zip https://gitgud.io/souris/aero-userchrome/-/package_files/17324/download
+unzip -q geckium/Geckium_Public_Beta_1.19.7.zip -d geckium/x
+unzip -q aero-userchrome/Release-2025.04.12.zip -d aero-userchrome/x
 ```
 
-3. In the terminal emulator of your choice (e.g Konsole), set the font to [TerminalVector](https://www.yohng.com/software/terminalvector.html), size 9pt. Disable smooth font rendering and bold text, reduce the line spacing and margins to 0px, set the cursor shape to underline, and enable cursor blinking.
+### 3. Copy everything into the profile
 
-4. Install [PlymouthVista](https://github.com/furkrn/PlymouthVista) which supports Windows 7 boot animations, and features a more detailed setup guide.
-5. Install [ExecBin](https://gitgud.io/catpswin56/execbin) for a more accurate "Run..." application.
-
-## GTK <a name="gtk"></a>
-
-AeroThemePlasma officially doesn't have any kind of maintenance, development or support for GTK applications. Instead, check out
-[Windows 7 Better](https://gitgud.io/Gamer95875/Windows-7-Better) by [Gamer95875](https://gitgud.io/Gamer95875), which is the recommended set of themes that works best with AeroThemePlasma.
-
-## Uninstalling AeroThemePlasma (old) <a name="uninstall_old"></a>
-
-### This section is meant for users migrating away from older versions of AeroThemePlasma (Before Plasma 6.6). 
-
-AeroThemePlasma provides an uninstall script that undoes much of what's installed on the system. The script assumes that all of the CMake build files are still present in the repo, most importantly the `install_manifest.txt` files generated as a result of installing compiled parts of ATP. If these files are missing from the repo, they need to be regenerated by once again rerunning the necessary scripts like this:
+Find the profile folder in LibreWolf: `about:support` → *Profile Folder*. Close LibreWolf, then
+(replace `XXXXXXXX` with your profile's name):
 
 ```bash
-$ bash compile.sh --skip-libplasma [--wayland] [--ninja]
-$ bash install_plasmoids.sh --skip-kpackages [--ninja]
+P=~/.config/librewolf/librewolf/XXXXXXXX.default-release
+E=~/aerothemeplasma-kubuntu-lts-26.04/extras/librewolf
+cd ~/Downloads/atp-librewolf
+cp -a "$P" ~/Downloads/atp-librewolf/profile-backup
+cp -r geckium/x/"Profile Folder"/chrome geckium/x/"Profile Folder"/chrThemes "$P/"
+cp -r aero-userchrome/x/Aero aero-userchrome/x/CSS aero-userchrome/x/GTK "$P/chrome/"
+cp aero-userchrome/x/JS/aero_button_glow.uc.js "$P/chrome/JS/"
+printf '\n/* Aero UserChrome (Windows 7 glass window frame) */\n@import url("Aero/Geckium.css");\n' >> "$P/chrome/userChrome.css"
+cat "$E/librewolf-aero-buttons-100pct.css" "$E/librewolf-urlbar-dark.css" >> "$P/chrome/userChrome.css"
+cp "$E/librewolf.overrides.cfg" ~/.config/librewolf/librewolf/librewolf.overrides.cfg
+sudo cp "$E/geckium-sandbox.js" /usr/share/librewolf/defaults/pref/geckium-sandbox.js
 ```
 
-Once this is done, the script is simply executed:
+What the two CSS files do: `librewolf-aero-buttons-100pct.css` keeps the caption buttons at 100%
+(matching the window buttons of other programs) when LibreWolf runs at 125%;
+`librewolf-urlbar-dark.css` gives the address bar a dark grey in both states with Geckium's dark
+mode, and hides the suggestion list under it (its background stayed white; autofill still works).
 
-```bash
-$ bash uninstall.sh
-```
+### 4. First start and checks
 
-This should be run outside of the AeroThemePlasma session, preferrably in a regular Plasma session. The script will ask for confirmation to uninstall components of the system. **Please check that none of the locations are ill-formed before accepting each prompt, especially those that require additional privileges to uninstall. In case this happens to you, report it as an issue ASAP.**
+Start LibreWolf; Geckium's setup window appears (it may restart the browser once or twice). Then
+check in `about:config` that LibreWolf's own settings still load:
 
-Afterwards, `libplasma` and `polkit-kde-agent` should be reinstalled using your distro's package manager. For example, on Arch Linux:
+| Setting | Must show |
+|---|---|
+| `librewolf.cfg.version` | a version number (only exists if LibreWolf's settings loaded) |
+| `general.config.filename` | `librewolf.cfg` |
+| `general.config.sandbox_enabled` | `false` |
+| `privacy.resistFingerprinting` | `true` |
 
-```bash
-sudo pacman -S libplasma polkit-kde-agent
-```
+### 5. Settings in `about:config`
 
-### Manual uninstallation
+Create a setting if it doesn't exist (type the name, choose the type, click +):
 
-The script performs the following steps in order to uninstall ATP. Uninstalling ATP should be done outside of the ATP session itself. Log into the Plasma session before performing any of these steps.
+| Setting | Value | Why |
+|---|---|---|
+| `widget.non-native-theme.enabled` | reset (default) | Geckium changes it; default = like every other LibreWolf user |
+| `widget.gtk.overlay-scrollbars.enabled` | reset (default) | same; otherwise web pages can measure the scrollbar width |
+| `widget.gtk.rounded-bottom-corners.enabled` | `true` | asked for by Aero UserChrome |
+| `Geckium.appearance.titlebarStyle` | `win` (String) | Aero UserChrome only works with Windows caption buttons… |
+| `Geckium.appearance.titlebarNative` | `1` (Number) | …and "native" (glass) titlebar mode |
+| `Geckium.people.style` | `off` (String) | hides the profile button next to the caption buttons |
+| `aero-userchrome.force-css-glow` | `true` (Boolean) | button glow inside the window (the pop-up glow lands in the wrong place on Wayland) |
+| `layout.css.devPixelsPerPx` | `1.25` | whole browser at 125%, without zoom (optional) |
 
-### CMake
+Keep **Title bar** off in Customize Toolbar.
 
-- Perform `sudo make uninstall` or `sudo ninja uninstall` in the following directories if applicable:
+### 6. Let the Aero Glass Blur effect blur LibreWolf
 
-```
-kwin/decoration/build
-plasma/sddm/login-sessions/build
-plasma/aerothemeplasma-kcmloader/build
-plasma/plasmoids/src/systemtray_src/build
-plasma/plasmoids/src/notifications_src/build
-plasma/plasmoids/src/volume_src/build
-plasma/plasmoids/src/sevenstart_src/build
-plasma/plasmoids/src/seventasks_src/build
-plasma/plasmoids/src/desktopcontainment/build
-kwin/effects_cpp/kde-effects-aeroglassblur/build
-kwin/effects_cpp/kwin-effect-smodsnap-v2/build
-kwin/effects_cpp/smodglow/build
-kwin/effects_cpp/aeroglide/build
-kwin/effects_cpp/startupfeedback/build
+System Settings → Desktop Effects → Aero Glass Blur → configure → *"Classes of Firefox windows to
+apply custom blur:"* → add a line `librewolf` under `firefox` → Apply.
 
-# For Wayland builds
-kwin/effects_cpp/kde-effects-aeroglassblur/build-wl
-kwin/effects_cpp/kwin-effect-smodsnap-v2/build-wl
-kwin/effects_cpp/smodglow/build-wl
-kwin/effects_cpp/aeroglide/build-wl
-kwin/effects_cpp/startupfeedback/build-wl
-```
+### Optional: let websites see dark mode
 
-### Plasmoids 
+LibreWolf's anti-fingerprinting tells every website "light mode". `optional-dark-websites.cfg`
+has the recipe from LibreWolf's FAQ to let websites see dark mode while keeping all other
+protections; add its lines to `~/.config/librewolf/librewolf/librewolf.overrides.cfg`.
+LibreWolf advises against this: it makes you one of a smaller group.
 
-- Perform `kpackagetool6 -t "Plasma/Applet" -r "plasmoid_id"` for each plasmoid, replacing `plasmoid_id` with the following:
+### Undo
 
-```
-io.gitgud.wackyideas.battery
-io.gitgud.wackyideas.desktopcontainment
-io.gitgud.wackyideas.digitalclocklite
-io.gitgud.wackyideas.keyboardlayout
-io.gitgud.wackyideas.networkmanagement
-io.gitgud.wackyideas.panel
-io.gitgud.wackyideas.SevenStart
-io.gitgud.wackyideas.seventasks
-io.gitgud.wackyideas.volume
-io.gitgud.wackyideas.win7showdesktop
-```
-
-### Plasma components 
-
-- Perform the following commands:
-
-```bash
-kpackagetool6 -t "Plasma/LookAndFeel" -r "authui7"
-kpackagetool6 -t "Plasma/LayoutTemplate" -r "io.gitgud.wackyideas.taskbar"
-kpackagetool6 -t "Plasma/Theme" -r "Seven-Black"
-kpackagetool6 -t "Plasma/Shell" -r "io.gitgud.wackyideas.desktop"
-```
-
-- Delete `~/.local/share/color-schemes/Aero.colors`
-- Delete `~/.config/Kvantum/Windows7Aero` 
-- Delete the sound themes from `~/.local/share/sounds`:
-
-```
-'Windows 7'
-'Windows 7 Afternoon'
-'Windows 7 Calligraphy'
-'Windows 7 Characters'
-'Windows 7 Cityscape'
-'Windows 7 Delta'
-'Windows 7 Festival'
-'Windows 7 Garden'
-'Windows 7 Heritage'
-'Windows 7 Landscape'
-'Windows 7 Quirky'
-'Windows 7 Raga'
-'Windows 7 Savanna'
-'Windows 7 Sonata'
-```
-
-- Delete the icon theme at `~/.local/share/icons/Windows 7 Aero`
-- Delete the following files at `~/.local/share/mime/packages`:
-
-```
-application-vnd.microsoft.portable-executable.xml 
-application-x-ms-dll.xml 
-application-x-msdownload.xml 
-application-x-ms-ne-executable.xml
-```
-
-and run `update-mime-database ~/.local/share/mime` to refresh MIME associations
-
-### KWin components 
-
-- Perform `kpackagetool6 -t "KWin/Effect" -r "effect_id"` for each effect, replacing `effect_id` with the following:
-
-```
-dimscreenaero
-fadingpopupsaero
-loginaero
-seventasks-thumbnails
-smodpeekeffect
-squashaero
-```
-
-- Perform the following: 
-
-```bash
-kpackagetool6 -t "KWin/Script" -r "smodpeekscript"
-kpackagetool6 -t "KWin/WindowSwitcher" -r "flip3d"
-kpackagetool6 -t "KWin/WindowSwitcher" -r "thumbnail_seven"
-```
-
-- Delete the outline at `~/.local/share/kwin/outline`
-- Delete the symlinks `~/.local/share/kwin-x11` and `~/.local/share/kwin-wayland`
-- Delete the branding at `~/.config/kdedefaults/kcm-about-distrorc` and the logo (`~/.config/kdedefaults/kcminfo.png`)
-
-### Other components 
-
-- Delete the cursor theme at `/usr/share/icons/aero-drop`
-- Delete the SDDM theme at `/usr/share/sddm/themes/sddm-theme-mod`
-- Delete the SMOD files at `/usr/share/smod` and `~/.local/share/smod`
-- Delete `/opt/aerothemeplasma`
-
-- To undo the font rendering modifications, delete the ~/.config/fontconfig/fonts.conf file provided by the previous versions of ATP.
-- Remove the line QML_DISABLE_DISTANCEFIELD=1 from /etc/environment
+Close LibreWolf; `sudo rm /usr/share/librewolf/defaults/pref/geckium-sandbox.js`; delete
+`~/.config/librewolf/librewolf/librewolf.overrides.cfg`; put the profile backup back.

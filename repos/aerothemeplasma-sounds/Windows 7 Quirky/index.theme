@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Quirky
+Comment=Qwerty but not for nerds
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

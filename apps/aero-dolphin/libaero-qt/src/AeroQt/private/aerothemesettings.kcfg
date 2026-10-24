@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://kde.org"
+      xmlns:xsi="http://w3.org"
+      xsi:schemaLocation="http://kde.org http://kde.org/kcfg.xsd">
+  <kcfgfile name="aerothemerc"/>
+  <group name="General">
+    <entry name="ToolbarOverrides" type="String">
+      <!-- [{appname: string, objectName?: string, color: string, flat?: bool}] -->
+      <default>[{"appName":"konsole","color":"black"}]</default>
+    </entry>
+  </group>
+  <group name="Tweaks">
+    <entry name="NoFadeNavButtons" type="Bool">
+      <default>false</default>
+    </entry>
+  </group>
+  <group name="Branding">
+    <entry name="Build" type="Int">
+      <default>7600</default>
+    </entry>
+  </group>
+</kcfg>

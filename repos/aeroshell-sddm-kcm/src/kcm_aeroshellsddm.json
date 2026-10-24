@@ -1,0 +1,12 @@
+{
+    "KPlugin": {
+        "BugReportUrl": "https://gitgud.io/aeroshell/aeroshell-sddm-kcm",
+        "Description": "Manage AeroShell SDDM theme settings",
+        "Description[es]": "Cambia la configuración del tema SDDM AeroShell",
+        "Icon": "system-lock-screen",
+        "Name": "SDDM Theme",
+        "Name[es]": "Tema SDDM"
+    },
+    "X-KDE-System-Settings-Parent-Category": "aeroshell",
+    "X-KDE-Weight": 20
+}

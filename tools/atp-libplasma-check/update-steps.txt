@@ -1,0 +1,77 @@
+AEROTHEMEPLASMA: UPDATING OR RESTORING LIBPLASMA
+================================================
+
+Use these steps when the login popup says that a Plasma update is waiting, or
+that the Aero libplasma has been replaced. Run the commands in a terminal
+(Konsole), one at a time. Commands starting with "sudo" ask for your password.
+
+Do these steps when you have about an hour and can log out at the end.
+If anything gives an error, stop. This fork comes without support; the Timeshift
+snapshot from step 1 is your way back.
+
+
+1. TAKE A SNAPSHOT
+   Open Timeshift and click "Create". Comment: "before libplasma update".
+
+
+2. RELEASE THE HOLD
+
+     sudo apt-mark unhold libplasma7 libplasmaquick7 libplasma-dev
+
+
+3. INSTALL UBUNTU'S UPDATES
+
+     sudo apt update
+     sudo apt full-upgrade
+
+   Then note the new libplasma version:
+
+     apt-cache policy libplasma7
+
+   The "Installed:" line shows it, for example 6.6.7-0ubuntu0.1.
+   The part before the dash (here 6.6.7) is the KDE version.
+
+
+4. A NEW KDE VERSION?
+   Skip this step if the KDE version is still 6.6.6 (the popup only said the
+   Aero version had been replaced, not that there was a new version).
+
+   If it is newer (for example 6.6.7): the libplasma in this fork is frozen at
+   KDE 6.6.6 and has no git history to merge into. Merging KDE's new version
+   needs the original repositories (https://gitgud.io/aeroshell/libplasma,
+   branch Plasma/6.6, plus KDE's https://invent.kde.org/plasma/libplasma tag
+   v6.6.7) and is not covered here. Stay on the hold until then.
+
+   NOTE: if the first two numbers change (for example 6.6 becomes 6.7), this is
+   a bigger Plasma upgrade. The theme then needs its Plasma/6.7 version, which
+   this fork does not provide.
+
+
+5. REBUILD AND REINSTALL THE THEME
+   This rebuilds libplasma and also the KWin effects, which need rebuilding
+   after a Plasma update too.
+
+     cd ~/aerothemeplasma-kubuntu-lts-26.04
+     LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec UAC_LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec bash install.sh --skip-x11
+
+   Wait until it prints "Done.".
+
+
+6. PUT THE HOLD BACK
+
+     sudo apt-mark hold libplasma7 libplasmaquick7 libplasma-dev
+
+
+7. TELL THE LOGIN CHECK ABOUT THE NEW AERO LIBPLASMA
+
+     ~/.local/share/atp-libplasma-check/atp-libplasma-check --record
+
+   Then check that all is well:
+
+     ~/.local/share/atp-libplasma-check/atp-libplasma-check --status
+
+   All three lines should say: yes / no / yes.
+
+
+8. LOG OUT AND BACK IN
+   The new libraries are only loaded at login.

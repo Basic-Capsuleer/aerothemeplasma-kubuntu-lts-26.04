@@ -1,191 +1,88 @@
-# AeroThemePlasma
-
-## HIATUS NOTICE: This is a long overdue announcement, but development will slow down significantly as a result of real life priorities I have to take care of first. Estimated time until I continue development is unknown, but don't expect anything significant in the following few months, until August, probably. Thank you for your patience and support.
-
-## Microsoft® Windows™ is a registered trademark of Microsoft® Corporation. This name is used for referential use only, and does not aim to usurp copyrights from Microsoft. Microsoft Ⓒ 2025 All rights reserved. All resources belong to Microsoft Corporation.
-
-## Introduction
-
-This is a project which aims to recreate the look and feel of Windows 7 as much as possible on KDE Plasma, whilst adapting the design to fit in with modern features provided by KDE Plasma and Linux.
-
-ATP is in constant development and testing, it has been tested on:
-
-- Arch Linux x64 and other Arch derivatives
-- Plasma 6.6.1, KDE Frameworks 6.23.0, Qt 6.10.2
-- 96 DPI scaling, multi monitor
-- X11, Wayland*
-
-*AeroThemePlasma currently lacks full Wayland support, which may result in Wayland-specific issues. 
-
-## This software comes "as is" without warranty of any kind. It's always recommended to make backups of your system just in case. I am not responsible for broken systems, please proceed with caution.
-
-The Plasma 5 version of ATP is available as a tag in this repository, however it is unmaintained and no longer supported.
-
-If you find my work valuable consider donating:
-
-<a href='https://ko-fi.com/M4M2NJ9PJ' target='_blank'><img height='42' style='border:0px;height:42px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-
-[![](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/ZDeT6vdqMp)
-
-[AeroThemePlasma](https://github.com/aeroshell-desktop/aerothemeplasma) and all of its AeroShell components are available as read-only [GitHub mirrors](https://github.com/aeroshell-desktop/).
-
-## Installation
-
-See [INSTALL.md](./INSTALL.md) for a detailed installation guide.
-
-## Credits 
-
-Huge thanks to everyone who helped out along the way by contributing, testing, providing suggestions and generally making ATP possible:
-
-### Forked code
-
-- Intika's [Digital Clock Lite](https://store.kde.org/p/1225135/) plasmoid
-- [Adhe](https://store.kde.org/p/1386465/), [oKcerG](https://github.com/oKcerG/QuickBehaviors) and [SnoutBug](https://store.kde.org/p/1720532) for making SevenStart possible
-- Zren's [Win7 Show Desktop](https://store.kde.org/p/2151247) plasmoid
-- [Mirko Gennari](https://store.kde.org/p/998614), DrGordBord and [bionegative](https://www.pling.com/p/998823) for making SevenBlack possible
-- DrGordBord's [Windows 7 Kvantum](https://store.kde.org/p/1679903) theme
-- [taj-ny](https://github.com/taj-ny)'s [kwin-effects-forceblur](https://github.com/taj-ny/kwin-effects-forceblur)
-
-### Contributors
-- [Souris-2d07](https://gitgud.io/souris) for making the following: 
-    - Cursor theme
-    - Plymouth theme (old)
-    - SDDM theme
-    - KWin decoration theme
-    - Most KWin C++ effects
-    - Other minor KWin features and scripts
-- [That Linux Dude Dominic Hayes](https://github.com/dominichayesferen) for making the following: 
-    - Lock screen UI 
-    - Icon theme
-- [catpswin56](https://gitgud.io/catpswin56/) for help with SevenTasks, Sound Mixer plasmoid, Gadgets menu, Polkit UAC skin, as well as many more contributions
-- [QuinceTart10](https://github.com/QuinceTart10) and [Gamer95875](https://github.com/Gamer95875) for making the sound themes
-- (In collaboration with) [kfh83](https://github.com/kfh83), [TorutheRedFox](https://github.com/TorutheRedFox) and [ALTaleX](https://github.com/ALTaleX531/dwm_colorization_calculator/blob/main/main.py) for figuring out accurate Aero glass blur and colorization effects
-- [AngelBruni](https://github.com/angelbruni) for contributing several SVG textures, most notably the clock in DigitalClockLite Seven
-- [ricewind012](https://github.com/ricewind012/) for .bashrc Microsoft Windows header
-- [furkrn](https://gitgud.io/furkrn) for creating and maintaining the [Plymouth theme](https://github.com/furkrn/PlymouthVista)
-- [IcyGuidance](https://gitgud.io/IcyGuidance) for designing the notification badges in SevenTasks
-
-### Special Thanks 
-
-- [MondySpartan](https://www.deviantart.com/mondyspartan/art/Windows-10-Year-2010-Edition-1016859431) for inspiring the notification design
-
-### Cool projects you should really check out
-
-- [Geckium](https://github.com/angelbruni/Geckium) by AngelBruni
-- [Aero UserChrome](https://gitgud.io/souris/aero-userchrome) by Souris (Geckium in combination with Aero UserChrome works well with AeroThemePlasma)
-- [VistaThemePlasma](https://gitgud.io/aeroshell/vtp/vistathemeplasma/) by catpswin56
-- [LonghornThemePlasma](https://gitgud.io/catpswin56/longhornthemeplasma) by catpswin56
-- [VB1ThemePlasma](https://gitgud.io/catpswin56/vista-beta-plasma) by catpswin56
-- [Harmony](https://gitgud.io/catpswin56/harmony) by catpswin56
-- [SMOD Themes](https://gitgud.io/catpswin56/smod-themes) by catpswin56, a collection of themes that can be used with the SMOD window decoration theme
-- [X6Shell](https://gitgud.io/x6shell) by catpswin56
-- [Ice2K.sys](https://toiletflusher.neocities.org/ice2k/) by 0penrc
-- [AeroThemePlasma-Nix](https://github.com/nyakase/aerothemeplasma-nix/) by [nyakase](https://github.com/nyakase)
-
-## Vista variant
-
-Initially I wanted to make a Vista variant of AeroThemePlasma but [catpswin56](https://gitgud.io/catpswin56) beat me to it, use [VistaThemePlasma](https://gitgud.io/aeroshell/vtp/vistathemeplasma) if you want a Vista theme.
-
-## Aero apps for AeroThemePlasma
-- [Aero Dolphin](https://gitgud.io/atmk/dolphin-aero) by Albert Tomanek
-- [Aero GwenView](https://gitgud.io/atmk/gwenview-aero) by Albert Tomanek
-- [Aero KolourPaint](https://invent.kde.org/albert-tomanek/kolourpaint/-/tree/saribbon-aero) by Albert Tomanek
-- [Device Manager](https://github.com/actuallyaridan/linux-devmgmt) by ActuallyAridan
-- [TuxManager](https://github.com/benapetr/TuxManager) by benapetr
-- [Gadgets](https://gitgud.io/catpswin56/win-gadgets) by catpswin56
-- [WinXplorer](https://gitgud.io/catpswin56/winxplorer) by catpswin56
-- [execbin](https://gitgud.io/catpswin56/execbin) (run dialog) by catpswin56
-- [LinVer](https://gitgud.io/wackyideas/linver) (version dialog) by WackyIdeas
-- ~~[Sevulet](https://gitgud.io/snailatte/sevulet) by [snailatte](https://gitgud.io/snailatte)~~
-
-To install most of these, the commands to run after cloning are: `mkdir build; cd build; cmake .. -DCMAKE_INSTALL_PREFIX=/usr; sudo make install`.
-
-## Screenshots
-
-### Desktop
-
-![desktop](screenshots/desktop.png)
-
-### Start Menu
-
-![start_menu](screenshots/start_menu.png)
-![start_menu_search](screenshots/start_menu_search.png)
-![start_menu_apps](screenshots/start_menu_apps.png)
-![start_menu_openshell](screenshots/start_menu_openshell.png)
-
-### Clock
-
-![clock](screenshots/clock.png)
-
-### System Tray
-
-![battery](screenshots/battery.png)
-![systray](screenshots/system_tray.png)
-
-### Sound Mixer 
-
-![mixer](screenshots/mixer.png)
-![mixer_expanded](screenshots/mixer_expanded.png)
-
-### Notifications 
-
-![notification](screenshots/notification.png)
-![notification-progress](screenshots/notification-progress.png)
-
-### Desktop Icons 
-
-![desktop-icons](screenshots/icons.png)
-
-### Lockscreen 
-
-![lockscreen](screenshots/lockscreen.png)
-
-### Aero Peek
-
-![aero-peek](screenshots/peek.png)
-
-### Alt-Tab Switcher
-
-![alt-tab](screenshots/alt-tab.png)
-
-### Colorization 
-
-![colorization](screenshots/colorization.png)
-Regular colorization:
-![regular-colorization](screenshots/aeroblur.png)
-Basic colorization:
-![basic-colorization](screenshots/aeroblursimple.png)
-Maximized opaque colorization:
-![maximized-colorization](screenshots/aeroblur_opaque.png)
-
-### Decorations
-
-![decorations](screenshots/decorations.png)
-
-Decoration themes:
-
-![decoration-themes](screenshots/smod_theme.png)
-
-### Gadgets 
-
-![gadgets](screenshots/gadgets.png)
-
-### Network details
-
-![network-details](screenshots/network-details.png)
-
-### Librewolf
-
-![librewolf](screenshots/geckium.png)
-
-### User Account Control (Polkit)
-
-![uac](screenshots/uac.png)
-![uac-trusted](screenshots/uac-trusted.png)
-
-### Taskbar
-
-![taskbar](screenshots/jumplist.png)
-![taskbar_tooltips](screenshots/seventasks_media.png)
-![taskbar_inactive](screenshots/seventasks_inactive.png)
-![taskbar_compact](screenshots/seventasks_compact.png)
+# AeroThemePlasma for Kubuntu 26.04 LTS (personal fork)
+
+A frozen, personal fork of [AeroThemePlasma](https://gitgud.io/wackyideas/aerothemeplasma) by
+WackyIdeas and contributors (the Windows 7 look for KDE Plasma), set up and fixed for **one
+specific system**:
+
+- **Kubuntu 26.04 LTS** with **Plasma 6.6.6**, KDE Frameworks 6.24, Qt 6.10
+- **Wayland** only (installed with `--skip-x11`)
+- **Multiple screens**
+- **A bigger system font** (11–12 pt) at 100% display scaling, so everything is bigger but stays
+  sharp (instead of Wayland's blurry fractional scaling)
+
+It also includes **Aero Dolphin** (the file manager in the Windows 7 Explorer look) and the setup
+for **LibreWolf** in the Windows 7 / old Chrome look.
+
+> [!WARNING]
+> **Please read before using this.**
+> - **No support.** I share this as is. Issues and questions will probably not be answered.
+> - **Not actively maintained.** It is frozen at versions that work on the system above. It will
+>   not follow updates of the original project, and it will not work on other Plasma versions.
+> - **I am not an experienced programmer.** All changes in this fork were made with an AI
+>   assistant (Claude, by Anthropic), tested on my own laptop. I can't vouch for them beyond that.
+> - For anything else, use the original project:
+>   https://gitgud.io/wackyideas/aerothemeplasma
+
+Installation: see **[INSTALL.md](INSTALL.md)**.
+The original project's README and install guide are kept as
+[README.upstream.md](README.upstream.md) and [INSTALL.upstream.md](INSTALL.upstream.md).
+
+## What's different from the original
+
+All parts of the theme are **included in this repository** (in `repos/`), frozen at versions that
+work together on Plasma 6.6.6, so the install script downloads nothing.
+
+**Making it work on Kubuntu 26.04 LTS**
+- The theme's Plasma/6.6 versions (the newest code targets Plasma 6.8); aeroshell-sddm-kcm pinned
+  to its last 6.6.5 version.
+- libplasma: the theme's version merged with KDE's official 6.6.6, so Ubuntu's library versioning
+  can't switch it off. A login check warns when an update replaces it (`tools/`).
+- Two version checks lowered to what Ubuntu 26.04 ships (PlasmaActivities 6.6.4,
+  wayland-protocols 1.45).
+- Everything is built as **Release** (optimised) instead of Debug.
+
+**Multiple screens**
+- Tray and taskbar popups opening on the wrong screen (libplasma used screen-relative coordinates).
+- The floating start orb sometimes stuck at the top of a screen (KWin applies a new position only
+  with the next frame; the orb now redraws once).
+
+**Bigger font, still sharp**
+- Taskbar buttons and icons grow with the taskbar height using the icon theme's real image sizes
+  (40 px program icons, 24 px tray icons at a 50 px taskbar); the tray's hidden-icons popup and
+  arrow grow along.
+- Start menu: "All Programs", "Back", "Shut down", the search field and the profile picture follow
+  the system font; the orb sticks out of a shorter taskbar instead of being cut off.
+- Taskbar right-click menu and window previews grow with the font.
+- The UAC (password) window, its password field and picture grow with the font.
+
+**Other fixes**
+- Show desktop button: clicking minimises all windows, hovering shows Aero Peek with glass window
+  frames (made to work and run smoothly on Wayland).
+- Taskbar previews also show minimised windows (on Wayland KWin can stream them).
+
+**Aero Dolphin** (`apps/aero-dolphin/`, from [Albert Tomanek's fork](https://gitgud.io/atmk/dolphin-aero)
+and [libAeroQt](https://gitgud.io/atmk/libaero-qt))
+- Back/forward buttons at 125%; address bar and search field as tall as the font needs.
+- Free-space bars coloured again and the folder tree's expand arrows visible again (the fork's
+  application-wide stylesheet hid them; now applied to the window header only).
+
+**LibreWolf** (`extras/librewolf/`): how to combine Geckium and Aero UserChrome with LibreWolf
+without losing its privacy settings, plus 100% caption buttons at 125% and a dark address bar.
+
+## Licenses
+
+Each part keeps its original license; see the license files in each folder.
+- AeroThemePlasma, aeroshell-kwin-components, aeroshell-workspace, SMOD, aeroshell-sddm-kcm,
+  libAeroQt, the icons and the sounds: **AGPL-3.0** (the icons and sounds with the note that the
+  Windows assets belong to Microsoft)
+- libplasma: **LGPL** (KDE)
+- uac-polkit-agent, Dolphin: **GPL-2.0-or-later**
+
+As the original project notes, Microsoft® Windows™ is a registered trademark of Microsoft
+Corporation; the artwork belongs to Microsoft.
+
+## Credits
+
+All credit for AeroThemePlasma goes to [WackyIdeas](https://gitgud.io/wackyideas) and everyone
+listed in [README.upstream.md](README.upstream.md); for Aero Dolphin and libAeroQt to
+[Albert Tomanek](https://gitgud.io/atmk); for Dolphin and libplasma to KDE.

@@ -1,0 +1,46 @@
+/* Caption buttons at 100% while LibreWolf runs at 125% (layout.css.devPixelsPerPx = 1.25), to
+   match KWin's own window buttons. Aero UserChrome gives its sizes in screen pixels and divides
+   them by the scale itself, so using its 100% (96 dpi) images and sizes here draws them 1:1. */
+@media (min-resolution: 120dpi) and (max-resolution: 120dpi) {
+  :root[gktitnative=true]:is([tabsintitlebar])[gktitbuttons=win],
+  :root[gktitnative=true]:is([customtitlebar])[gktitbuttons=win] {
+    --aero-titlebuttons-bitmap-minimize: url("chrome://userchrome/content/Aero/Assets/minimize.png");
+    --aero-titlebuttons-bitmap-minimize-hover: url("chrome://userchrome/content/Aero/Assets/minimize-hover.png");
+    --aero-titlebuttons-bitmap-minimize-active: url("chrome://userchrome/content/Aero/Assets/minimize-active.png");
+    --aero-titlebuttons-bitmap-maximize: url("chrome://userchrome/content/Aero/Assets/maximize.png");
+    --aero-titlebuttons-bitmap-maximize-hover: url("chrome://userchrome/content/Aero/Assets/maximize-hover.png");
+    --aero-titlebuttons-bitmap-maximize-active: url("chrome://userchrome/content/Aero/Assets/maximize-active.png");
+    --aero-titlebuttons-bitmap-restore: url("chrome://userchrome/content/Aero/Assets/restore.png");
+    --aero-titlebuttons-bitmap-restore-hover: url("chrome://userchrome/content/Aero/Assets/restore-hover.png");
+    --aero-titlebuttons-bitmap-restore-active: url("chrome://userchrome/content/Aero/Assets/restore-active.png");
+    --aero-titlebuttons-bitmap-close: url("chrome://userchrome/content/Aero/Assets/close.png");
+    --aero-titlebuttons-bitmap-close-hover: url("chrome://userchrome/content/Aero/Assets/close-hover.png");
+    --aero-titlebuttons-bitmap-close-active: url("chrome://userchrome/content/Aero/Assets/close-active.png");
+    --aero-titlebuttons-bitmap-minimize-unfocus: url("chrome://userchrome/content/Aero/Assets/minimize-unfocus.png");
+    --aero-titlebuttons-bitmap-minimize-unfocus-hover: url("chrome://userchrome/content/Aero/Assets/minimize-unfocus-hover.png");
+    --aero-titlebuttons-bitmap-minimize-unfocus-active: url("chrome://userchrome/content/Aero/Assets/minimize-unfocus-active.png");
+    --aero-titlebuttons-bitmap-maximize-unfocus: url("chrome://userchrome/content/Aero/Assets/maximize-unfocus.png");
+    --aero-titlebuttons-bitmap-maximize-unfocus-hover: url("chrome://userchrome/content/Aero/Assets/maximize-unfocus-hover.png");
+    --aero-titlebuttons-bitmap-maximize-unfocus-active: url("chrome://userchrome/content/Aero/Assets/maximize-unfocus-active.png");
+    --aero-titlebuttons-bitmap-restore-unfocus: url("chrome://userchrome/content/Aero/Assets/restore-unfocus.png");
+    --aero-titlebuttons-bitmap-restore-unfocus-hover: url("chrome://userchrome/content/Aero/Assets/restore-unfocus-hover.png");
+    --aero-titlebuttons-bitmap-restore-unfocus-active: url("chrome://userchrome/content/Aero/Assets/restore-unfocus-active.png");
+    --aero-titlebuttons-bitmap-close-unfocus: url("chrome://userchrome/content/Aero/Assets/close-unfocus.png");
+    --aero-titlebuttons-bitmap-close-unfocus-hover: url("chrome://userchrome/content/Aero/Assets/close-unfocus-hover.png");
+    --aero-titlebuttons-bitmap-close-unfocus-active: url("chrome://userchrome/content/Aero/Assets/close-unfocus-active.png");
+    --aero-titlebuttons-glow-min: url("chrome://userchrome/content/Aero/Assets/minimize-glow.png");
+    --aero-titlebuttons-glow-max: url("chrome://userchrome/content/Aero/Assets/maximize-glow.png");
+    --aero-titlebuttons-glow-close: url("chrome://userchrome/content/Aero/Assets/close-glow.png");
+    --aero-titlebuttons-global-height: 20px;
+    --aero-titlebuttons-minimize-width: 29px;
+    --aero-titlebuttons-maximize-width: 27px;
+    --aero-titlebuttons-restore-width: 27px;
+    --aero-titlebuttons-close-width: 49px;
+    --aero-titlebuttons-glow-minimize-w: 47px;
+    --aero-titlebuttons-glow-minimize-h: 35px;
+    --aero-titlebuttons-glow-maximize-w: 45px;
+    --aero-titlebuttons-glow-maximize-h: 35px;
+    --aero-titlebuttons-glow-close-w: 66px;
+    --aero-titlebuttons-glow-close-h: 35px;
+  }
+}

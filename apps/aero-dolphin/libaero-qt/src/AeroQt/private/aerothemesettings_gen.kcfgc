@@ -1,0 +1,9 @@
+File=aerothemesettings.kcfg
+ClassName=AeroThemeSettingsGen
+Singleton=true
+Mutators=true
+Notifiers=true
+GenerateProperties=true
+
+HeaderExtension=h
+IncludeGlobals=AeroQt/private/aerothemesettings.h

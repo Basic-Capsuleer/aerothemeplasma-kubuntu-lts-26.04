@@ -1,0 +1,3 @@
+[submodule "deps/slidingstackedwidget"]
+	path = deps/slidingstackedwidget
+	url = https://github.com/Qt-Widgets/SlidingStackedWidget-1

@@ -1,0 +1,17 @@
+diff --git a/src/util/kiconutils.cpp b/src/util/kiconutils.cpp
+index 9b7fb6e..e1d5a68 100644
+--- a/src/util/kiconutils.cpp
++++ b/src/util/kiconutils.cpp
+@@ -54,10 +54,10 @@ KOverlayIconEngine::KOverlayIconEngine(const QIcon &icon, const QStringList &ove
+     , m_base(icon)
+ {
+     const std::array<Qt::Corner, 4> indexToCorner{
+-        Qt::BottomRightCorner,
+         Qt::BottomLeftCorner,
+-        Qt::TopLeftCorner,
++        Qt::BottomRightCorner,
+         Qt::TopRightCorner,
++        Qt::TopLeftCorner,
+     };
+ 
+     // static_cast becaue size() returns a qsizetype in Qt6

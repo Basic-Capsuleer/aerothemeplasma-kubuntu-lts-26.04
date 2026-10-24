@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Heritage
+Comment=should have 9x or XP sounds, MS messed this one up ngl
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

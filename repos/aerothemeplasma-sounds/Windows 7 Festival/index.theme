@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Festival
+Comment=rip the pope lads
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

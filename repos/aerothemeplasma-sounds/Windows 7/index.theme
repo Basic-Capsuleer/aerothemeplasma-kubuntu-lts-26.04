@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7
+Comment=send aeros
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

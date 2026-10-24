@@ -1,0 +1,8 @@
+[Sound Theme]
+Name=Windows 7 Raga
+Comment=rags and riches type story
+Directories=stereo
+Example=theme-demo
+
+[stereo]
+OutputProfile=stereo

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-msdownload">
+        <comment>Windows or DOS program</comment>
+        <glob-deleteall/>
+        <magic-deleteall/>
+        <generic-icon name="application-x-executable"/>
+        <glob pattern="*.cpl" weight="100"/>
+        <glob pattern="*.drv" weight="100"/>
+        <glob pattern="*.exe" weight="100"/>
+        <glob pattern="*.scr" weight="100"/>
+    </mime-type>
+    <mime-type type="application/x-ms-ne-executable">
+        <comment>16-bit Windows program</comment>
+        <glob-deleteall/>
+        <magic-deleteall/>
+        <generic-icon name="application-x-executable"/>
+        <glob pattern="*.cpl" weight="100"/>
+        <glob pattern="*.drv" weight="100"/>
+        <glob pattern="*.exe" weight="100"/>
+        <glob pattern="*.scr" weight="100"/>
+    </mime-type>
+    <mime-type type="application/vnd.microsoft.portable-executable">
+        <comment>Windows or EFI program</comment>
+        <glob-deleteall/>
+        <magic-deleteall/>
+        <glob pattern="*.cpl" weight="100"/>
+        <glob pattern="*.drv" weight="100"/>
+        <glob pattern="*.efi" weight="100"/>
+        <glob pattern="*.exe" weight="100"/>
+        <glob pattern="*.lib" weight="100"/>
+        <glob pattern="*.ocx" weight="100"/>
+        <glob pattern="*.scr" weight="100"/>
+        <glob pattern="*.sys" weight="100"/>
+    </mime-type>
+    <mime-type type="application/x-ms-dll">
+        <comment>Dynamic link library file</comment>
+        <icon name="application-x-sharedlib"/>
+        <glob pattern="*.dll" weight="100"/>
+        <magic priority="100">
+            <match type="string" value="MZ" offset="0">
+                <match type="little16" mask="0xffc0" value="0" offset="24"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="NE" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="PE\0\0" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0"/>
+        </magic>
+    </mime-type>
+    <mime-type type="application/x-ms-tlb">
+        <comment>Windows Type Library</comment>
+        <icon name="unknown"/>
+        <glob pattern="*.tlb" weight="100"/>
+        <magic priority="100">
+            <match type="string" value="MZ" offset="0">
+                <match type="little16" mask="0xffc0" value="0" offset="24"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="NE" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="PE\0\0" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0"/>
+        </magic>
+    </mime-type>
+    <mime-type type="application/x-ms-msstyles">
+        <comment>Windows Visual Style File</comment>
+        <icon name="application-x-theme"/>
+        <glob pattern="*.msstyles" weight="100"/>
+        <magic priority="100">
+            <match type="string" value="MZ" offset="0">
+                <match type="little16" mask="0xffc0" value="0" offset="24"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="NE" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0">
+                <match type="string" value="PE\0\0" offset="64:256"/>
+            </match>
+            <match type="string" value="MZ" offset="0"/>
+        </magic>
+    </mime-type>
+</mime-info>
