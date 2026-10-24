@@ -107,6 +107,34 @@ The taskbar, tray, start menu, menus, previews, the clock's calendar and the UAC
 with the font. **Exception: the clock on the taskbar** has its own font setting and doesn't follow
 the system font; set it by hand (right-click the clock → Configure → its font/size).
 
+### 8. The exact look of my setup (optional)
+
+What makes the look in my screenshots, on top of the steps above:
+
+| What | Setting |
+|---|---|
+| Screens | 2× 2560×1440 @ 120 Hz + 1920×1080 laptop screen, all at **100%** scaling |
+| Fonts | System Settings → Text & Fonts → Fonts: **Segoe UI 12** (general, menu, toolbar, window title), small font **Segoe UI 11** |
+| Taskbar | Height **50** px, not floating, on every screen (bottom) |
+| Taskbar clock | Its own font size **12** (right-click the clock → Configure → Appearance); it does not follow the system font |
+| Start orb | Custom image, see below |
+| Global theme | AeroThemePlasma (`authui7`); colours **Aero**, Plasma style **Seven-Black**, icons **Windows 7 Aero**, cursor **aero-drop** (size 32), splash **authui7** |
+| Application style | **kvantum** with Kvantum theme **Windows7Aero** |
+| Window decoration | **SMOD** |
+| Aero glass colour | Desktop Effects → Aero Glass Blur → colour **group 7, colour 0** (hue 214, saturation 100, brightness 66, intensity 168) |
+| Desktop effects on | Aero Glass Blur, Aero Glide, SMOD Glow, SMOD Snap, SMOD Peek (effect and script), Dim Screen (Aero), MinimizeAll |
+| Wallpaper | The default Windows 7 wallpaper (Windows logo on blue), a 3840×2160 version; not included |
+
+**Start orb.** The orb is `WindowsStartButtonLarge (Thin taskbar at bottom).png` from
+`Windows7 different sizes.zip` in this Classic Shell / Open-Shell forum topic:
+https://classicshell.net/forum/viewtopic.php?t=3207
+(not included here; it's someone else's work). Unzip it somewhere permanent (e.g. `~/Pictures`),
+then right-click the start orb → Configure → custom button image → choose that file. It is
+81×81 px per state, so it sticks out above a 50 px taskbar like in Windows 7 (this fork's orb
+fixes keep it in place).
+
+**In Dolphin:** toolbar icon size 22 (right-click the toolbar → Icon Size).
+
 ---
 
 ## Part 2: Aero Dolphin (optional)
