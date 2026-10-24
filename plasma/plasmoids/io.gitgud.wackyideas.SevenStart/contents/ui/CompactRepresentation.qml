@@ -117,6 +117,10 @@ Item {
 
         orb.x = pos.x;
         orb.y = pos.y;
+        // On Wayland KWin applies a requested position only with the window's next frame. The orb's
+        // content doesn't change, so redraw it once to make sure the new position takes effect
+        // (otherwise an orb whose x didn't change could stay at its starting position).
+        orb.update();
     }
     function showMenu() {
         dashWindow.visible = !dashWindow.visible;
