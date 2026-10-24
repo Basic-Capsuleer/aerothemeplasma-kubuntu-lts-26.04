@@ -279,7 +279,8 @@ mode, and hides the suggestion list under it (its background stayed white; autof
 
 ### 4. First start and checks
 
-Start LibreWolf; Geckium's setup window appears (it may restart the browser once or twice). Then
+Start LibreWolf; Geckium's setup window appears (it may restart the browser once or twice). In it,
+pick a Chrome version; my screenshots use **Chrome 58 (2017)**. Then
 check in `about:config` that LibreWolf's own settings still load:
 
 | Setting | Must show |
