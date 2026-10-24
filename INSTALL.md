@@ -113,7 +113,7 @@ What makes the look in my screenshots, on top of the steps above:
 
 | What | Setting |
 |---|---|
-| Screens | 2× 2560×1440 @ 120 Hz + 1920×1080 laptop screen, all at **100%** scaling |
+| Screen | 2560×1440 @ 120 Hz at **100%** scaling |
 | Fonts | System Settings → Text & Fonts → Fonts: **Segoe UI 12** (general, menu, toolbar, window title), small font **Segoe UI 11** |
 | Taskbar | Height **50** px, not floating, on every screen (bottom) |
 | Taskbar clock | Its own font size **12** (right-click the clock → Configure → Appearance); it does not follow the system font |
