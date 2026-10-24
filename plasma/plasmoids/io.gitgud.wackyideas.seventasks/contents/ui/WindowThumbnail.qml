@@ -35,8 +35,19 @@ MouseArea {
     readonly property var minimized: isGroupDelegate ? model.IsMinimized : root.minimized
     readonly property var demandsAttention: isGroupDelegate ? model.IsDemandingAttention : root.demandsAttention
 
-    property int maxPreviewWidth: 164
-    property int maxPreviewHeight: 94
+    // AeroThemePlasma: the preview was designed for the standard 9 pt (12 px) font; with a bigger
+    // system font the preview, close button and icon grow by the same ratio (unchanged at the
+    // standard size)
+    property FontMetrics systemFontMetrics: FontMetrics {}
+    property FontMetrics designFontMetrics: FontMetrics { font.family: thumbnailRoot.systemFontMetrics.font.family; font.pixelSize: 12 }
+    readonly property real fontScale: Math.max(1, systemFontMetrics.height / designFontMetrics.height)
+    readonly property int closeButtonSize: Math.round(14 * fontScale)
+    // 22 px is the next icon size the icon themes have as real images, so the icon stays sharp
+    readonly property int titleIconSize: fontScale >= 1.25 ? 22 : 16
+    readonly property int headerHeight: Math.max(16, titleIconSize, closeButtonSize, Math.ceil(systemFontMetrics.height))
+
+    property int maxPreviewWidth: Math.round(164 * fontScale)
+    property int maxPreviewHeight: Math.round(94 * fontScale)
     property real baselineAspectRatio: maxPreviewWidth / maxPreviewHeight
 
     property real thumbnailHeight: maxPreviewHeight
@@ -200,22 +211,25 @@ MouseArea {
         width: parent.width - margins
         height: parent.height - margins - (mprisControls.active ? (mprisControls.height - (Kirigami.Units.smallSpacing*2)) : 0)
 
-        spacing: Kirigami.Units.smallSpacing/2
+        // AeroThemePlasma: more room between the title row and the preview when the font is bigger
+        // (2 px at the standard size)
+        spacing: Math.round(Kirigami.Units.smallSpacing/2 + Kirigami.Units.smallSpacing * 3 * (thumbnailRoot.fontScale - 1))
 
         RowLayout {
             id: header
 
             Layout.fillWidth: true
-            Layout.minimumHeight: 16
-            Layout.maximumHeight: 16
+            // AeroThemePlasma: as tall as its icon, text and close button need (16 px at the standard size)
+            Layout.minimumHeight: thumbnailRoot.headerHeight
+            Layout.maximumHeight: thumbnailRoot.headerHeight
 
             spacing: Kirigami.Units.smallSpacing
 
             visible: tasks.iconsOnly
 
             Kirigami.Icon {
-                Layout.preferredHeight: 16
-                Layout.preferredWidth: 16
+                Layout.preferredHeight: thumbnailRoot.titleIconSize
+                Layout.preferredWidth: thumbnailRoot.titleIconSize
 
                 source: icon
             }
@@ -239,8 +253,8 @@ MouseArea {
             KSvg.FrameSvgItem {
                 id: close
 
-                Layout.preferredWidth: 14
-                Layout.preferredHeight: 14
+                Layout.preferredWidth: thumbnailRoot.closeButtonSize
+                Layout.preferredHeight: thumbnailRoot.closeButtonSize
 
                 imagePath: Qt.resolvedUrl("svgs/button-close.svg")
                 prefix: closeMa.containsMouse ? (closeMa.containsPress ? "pressed" : "hover") : "normal"
@@ -281,7 +295,7 @@ MouseArea {
                 anchors.centerIn: parent
 
                 width: parent.Layout.minimumWidth
-                height: 94
+                height: thumbnailRoot.maxPreviewHeight
 
                 active: true
                 asynchronous: true
@@ -447,7 +461,7 @@ MouseArea {
                     right: parent.right
                 }
 
-                width: 14
+                width: thumbnailRoot.closeButtonSize
                 height: width
 
                 imagePath: Qt.resolvedUrl("svgs/button-close.svg")
