@@ -76,6 +76,22 @@ PlasmoidItem {
 
 	property bool isPeeking: false
 
+	// Tell the SMOD Peek KWin script to show or hide the glass window frames while the hover peek
+	// is active. On Wayland a KWin script can't see the show-desktop state itself, so the button
+	// signals it through two shortcuts the script registers.
+	onIsPeekingChanged: invokeKWinShortcut(isPeeking ? "SmodPeekShowFrames" : "SmodPeekHideFrames")
+
+	function invokeKWinShortcut(name) {
+		DBus.SessionBus.asyncCall({
+			service: "org.kde.kglobalaccel",
+			path: "/component/kwin",
+			iface: "org.kde.kglobalaccel.Component",
+			member: "invokeShortcut",
+			arguments: [new DBus.string(name)],
+			signature: "(s)"},
+			() => {}, (reply) => console.warn("Could not invoke KWin shortcut", name, reply.value));
+	}
+
 	MouseArea {
 		id: mouseArea
 		anchors.fill: parent
