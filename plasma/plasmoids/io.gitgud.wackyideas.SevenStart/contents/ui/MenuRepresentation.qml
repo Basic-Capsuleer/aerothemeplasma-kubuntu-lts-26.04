@@ -68,6 +68,9 @@ PlasmaCore.Dialog {
     property FontMetrics menuFontMetrics: FontMetrics {}
     property FontMetrics designFontMetrics: FontMetrics { font.family: root.menuFontMetrics.font.family; font.pixelSize: 12 }
     readonly property int menuTextGrowth: Math.max(0, Math.ceil(menuFontMetrics.height) - Math.ceil(designFontMetrics.height))
+    // The profile picture grows in proportion to the system font (64 px at the standard size).
+    // Its frame is a 9-slice BorderImage, so the frame's edges stay sharp at any size.
+    readonly property int avatarSize: Math.round(Kirigami.Units.iconSizes.huge * Math.max(1, menuFontMetrics.height / designFontMetrics.height))
 
 	property int cellCount: Plasmoid.configuration.numberRows + faves.getFavoritesCount()
     property bool searching: (searchField.text != "")
@@ -106,8 +109,8 @@ PlasmaCore.Dialog {
 	function setFloatingAvatarPosition()  {
 		// It's at this point where everything actually gets properly initialized and we don't have to worry about
 		// random unpredictable values, so we can safely allow the popup icon to show up.
-		iconUser.x = root.x + sidePanel.x+sidePanel.width/2-Kirigami.Units.iconSizes.huge/2 + Kirigami.Units.smallSpacing/2 - 1;
-		iconUser.y = root.y-Kirigami.Units.iconSizes.huge/2 + Kirigami.Units.smallSpacing;
+		iconUser.x = root.x + sidePanel.x+sidePanel.width/2-avatarSize/2 + Kirigami.Units.smallSpacing/2 - 1;
+		iconUser.y = root.y-avatarSize/2 + Kirigami.Units.smallSpacing;
 		firstTimePopup = true;
 	}
 
@@ -202,7 +205,7 @@ PlasmaCore.Dialog {
 		Layout.maximumWidth: Math.max(397, root.cellWidth + Kirigami.Units.mediumSpacing + columnItems.width) + Kirigami.Units.mediumSpacing*2
 
 		property int mainPanelHeight: leftSidebar.height + bottomControls.height
-		property int sidePanelHeight: backgroundBorderLine.height + searchBackground.height + columnItems.height + ((compositingEnabled && !root.isTouchingTopEdge()) ? Kirigami.Units.iconSizes.huge / 2 + Kirigami.Units.smallSpacing : nonCompositingIcon.height + Kirigami.Units.smallSpacing);
+		property int sidePanelHeight: backgroundBorderLine.height + searchBackground.height + columnItems.height + ((compositingEnabled && !root.isTouchingTopEdge()) ? avatarSize / 2 + Kirigami.Units.smallSpacing : nonCompositingIcon.height + Kirigami.Units.smallSpacing);
 		//property bool sidePanelOverflow: mainPanelHeight <= sidePanelHeight;
 
         Layout.minimumHeight: Math.max(Math.max(mainPanelHeight, sidePanelHeight), 377) + Kirigami.Units.smallSpacing/2 + Kirigami.Units.mediumSpacing*2
@@ -278,6 +281,7 @@ PlasmaCore.Dialog {
 
 				mainItem: FloatingIcon {
 					id: compositingIcon
+					size: root.avatarSize
 					visible: compositingEnabled
 				}
         	}
@@ -986,12 +990,13 @@ PlasmaCore.Dialog {
                 top: parent.top
                 bottomMargin: Kirigami.Units.largeSpacing
                 leftMargin: 5
-                topMargin: ((compositingEnabled && !root.isTouchingTopEdge()) ? Kirigami.Units.iconSizes.huge / 2 + Kirigami.Units.mediumSpacing : 0) + Kirigami.Units.mediumSpacing
+                topMargin: ((compositingEnabled && !root.isTouchingTopEdge()) ? avatarSize / 2 + Kirigami.Units.mediumSpacing : 0) + Kirigami.Units.mediumSpacing
 			}
 			spacing: Kirigami.Units.smallSpacing
 
 			FloatingIcon {
 				id: nonCompositingIcon
+				size: root.avatarSize
 				Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
 				visible: !compositingEnabled || root.isTouchingTopEdge()
 				opacity: !searching

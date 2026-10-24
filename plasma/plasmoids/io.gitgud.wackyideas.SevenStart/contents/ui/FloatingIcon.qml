@@ -27,7 +27,8 @@ import org.kde.kwindowsystem 1.0
 Item {
 		id: iconContainer
 		//The frame displayed on top of the user icon
-        height: Kirigami.Units.iconSizes.huge
+        property int size: Kirigami.Units.iconSizes.huge
+        height: size
             //Kirigami.Units.iconSizes.huge
         width: height
         anchors.horizontalCenter: parent.horizontalCenter
