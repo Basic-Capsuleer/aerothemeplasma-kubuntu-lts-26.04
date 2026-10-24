@@ -86,3 +86,35 @@ Corporation; the artwork belongs to Microsoft.
 All credit for AeroThemePlasma goes to [WackyIdeas](https://gitgud.io/wackyideas) and everyone
 listed in [README.upstream.md](README.upstream.md); for Aero Dolphin and libAeroQt to
 [Albert Tomanek](https://gitgud.io/atmk); for Dolphin and libplasma to KDE.
+
+## Screenshots
+
+Kubuntu 26.04 LTS, Wayland, 2560×1440 at 100% scaling with Segoe UI 12 and a 50 px taskbar.
+
+### Desktop and Aero Dolphin
+
+![desktop-dolphin](screenshots-kubuntu/desktop-dolphin.png)
+
+### Start menu and taskbar preview
+
+![start-menu-preview](screenshots-kubuntu/start-menu-preview.png)
+
+### Taskbar right-click menu and Dolphin's folder tree
+
+![taskbar-menu-dolphin-tree](screenshots-kubuntu/taskbar-menu-dolphin-tree.png)
+
+### Aero Peek (hovering the show desktop button)
+
+![aero-peek](screenshots-kubuntu/aero-peek.png)
+
+### LibreWolf, clock calendar and hidden tray icons
+
+![librewolf-calendar-tray](screenshots-kubuntu/librewolf-calendar-tray.png)
+
+### User Account Control (password window)
+
+![uac](screenshots-kubuntu/uac.png)
+
+### LibreWolf maximised (Geckium + Aero UserChrome, dark mode)
+
+![librewolf-maximised](screenshots-kubuntu/librewolf-maximised.png)
