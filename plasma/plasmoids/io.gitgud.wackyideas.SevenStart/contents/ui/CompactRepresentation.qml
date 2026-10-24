@@ -72,7 +72,25 @@ Item {
     readonly property var screenGeometry: Plasmoid.screenGeometry
 
     // Should the orb be rendered in its own dialog window so that it can stick out of the panel?
-    readonly property bool stickOutOrb: (Plasmoid.location == PlasmaCore.Types.TopEdge || Plasmoid.location == PlasmaCore.Types.BottomEdge) && Plasmoid.configuration.stickOutOrb && kicker.height <= 30 && !editMode
+    // Yes whenever the panel is shorter than the orb, so the orb is never cut off.
+    readonly property bool stickOutOrb: (Plasmoid.location == PlasmaCore.Types.TopEdge || Plasmoid.location == PlasmaCore.Types.BottomEdge) && Plasmoid.configuration.stickOutOrb && kicker.height < floatingOrbHeight && !editMode
+
+    // Height of the orb when it sticks out: one third of the orb image (it holds the normal,
+    // hover and pressed states stacked), scaled to the configured orb width. Read from the
+    // image itself, so it follows a custom orb image and the orb width setting. It always
+    // uses the sticking-out image, so it can't feed back into the stickOutOrb decision.
+    readonly property int floatingOrbHeight: {
+        if (floatingOrbImage.sourceSize.width <= 0) {
+            return 0;
+        }
+        const width = Plasmoid.configuration.orbWidth === 0 ? floatingOrbImage.sourceSize.width : Plasmoid.configuration.orbWidth;
+        return Math.round(width * floatingOrbImage.sourceSize.height / floatingOrbImage.sourceSize.width / 3);
+    }
+    Image {
+        id: floatingOrbImage
+        visible: false
+        source: getResolvedUrl(Plasmoid.configuration.customButtonImage, "orbs/orb_small.png")
+    }
     readonly property bool useCustomButtonImage: (Plasmoid.configuration.useCustomButtonImage)
     readonly property bool vertical: (Plasmoid.formFactor == PlasmaCore.Types.Vertical)
 
