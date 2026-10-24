@@ -79,28 +79,50 @@ sed "s|@HOME@|$HOME|" "$SRC/atp-libplasma-check.desktop" > ~/.config/autostart/a
 `--record` remembers the installed libplasma as "the Aero version"; only run it right after
 (re)building libplasma. `"$D/atp-libplasma-check" --status` shows the results in the terminal.
 
-### 6. Apply the theme and settings
+### 6. Log in to the AeroThemePlasma session and run the welcome wizard
 
-1. Choose the Windows 7 design in Kvantum:
-   ```bash
-   kvantummanager --set Windows7Aero
-   ```
-2. Apply the global theme **AeroThemePlasma** (System Settings → Colours & Themes → Global Theme),
-   or follow the theme's welcome program.
-3. Check System Settings → Colours & Themes → Application Style is **kvantum**.
-4. Switch on the two KWin scripts the show desktop button needs (the welcome program misses them):
+The install script adds its own login session. The theme only works fully in that session: it
+loads the theme's own settings, desktop shell and UAC password window.
+
+1. **Log out.** On the login screen, open the **session menu** (bottom left) and choose
+   **AeroThemePlasma (Wayland)** instead of "Plasma (Wayland)". Then log in. The login screen
+   remembers this choice.
+2. A few seconds after logging in, the **AeroThemePlasma first time setup wizard** opens
+   ("AeroThemePlasma OOTB Experience"). Follow it to the end and click **Finish**. It:
+   - applies the global theme (`authui7`), the Kvantum theme `Windows7Aero` and the `aero-drop`
+     cursor (size 32);
+   - switches on the Aero desktop effects and switches off KDE's own versions of them;
+   - sets the fonts to Segoe UI 9 (small 8) (see the font note in step 7);
+   - themes the **login screen** (SDDM) and copies your settings to it. It asks for your admin
+     password for that.
+
+   The wizard starts at every login until it has been finished once. To run it again later:
+   `atpootb` in a terminal (after setting `wizardRun=false` under `[OOTB]` in
+   `~/.config/aerothemeplasmarc`).
+3. Check System Settings → Colours & Themes → Application Style is **kvantum** (if Kvantum was
+   installed before step 4 it is).
+4. Switch on the two KWin scripts the show desktop button needs. The wizard tries to, but it uses
+   the effects list for them, so these two scripts stay off:
    ```bash
    kwriteconfig6 --file kwinrc --group Plugins --key minimizeallEnabled true
    kwriteconfig6 --file kwinrc --group Plugins --key smodpeekscriptEnabled true
    qdbus6 org.kde.KWin /KWin reconfigure
    ```
-5. **Log out and back in.**
+5. **Log out and back in** (into the AeroThemePlasma (Wayland) session).
+
+**After Ubuntu updates KWin or Plasma** (for example a security update), the theme's KWin effects
+can stop working until they are rebuilt: run step 4 again. libplasma itself is protected by the
+hold; the login check tells you when something needs attention.
 
 ### 7. Bigger but sharp (optional; this is what the fixes are made for)
 
 Instead of 125% display scaling (which makes the theme's artwork blurry on Wayland):
 - Display scaling **100%** on all screens (System Settings → Display Configuration).
 - System Settings → Text & Fonts → Fonts → *Adjust All Fonts…* → **11** or **12**; *Small* → **10**.
+  **Font note:** the theme uses **Segoe UI**, a Microsoft font that isn't included (or in Ubuntu).
+  Without it, the system quietly uses **Noto Sans** instead; my screenshots show Noto Sans. To get
+  Segoe UI you need it from your own Windows 7 installation disc (ISO); the original project has a
+  script for Arch Linux (see INSTALL.upstream.md, "Fonts").
 - Taskbar height **50** px (right-click the taskbar → Show Panel Configuration → Panel Height).
 
 The taskbar, tray, start menu, menus, previews, the clock's calendar and the UAC window then grow
@@ -114,7 +136,7 @@ What makes the look in my screenshots, on top of the steps above:
 | What | Setting |
 |---|---|
 | Screen | 2560×1440 @ 120 Hz at **100%** scaling |
-| Fonts | System Settings → Text & Fonts → Fonts: **Segoe UI 12** (general, menu, toolbar, window title), small font **Segoe UI 11** |
+| Fonts | System Settings → Text & Fonts → Fonts: **Segoe UI 12** (general, menu, toolbar, window title), small font **Segoe UI 11**; Segoe UI isn't installed, so it shows as Noto Sans (see step 7) |
 | Taskbar | Height **50** px, not floating, on every screen (bottom) |
 | Taskbar clock | Its own font size **12** (right-click the clock → Configure → Appearance); it does not follow the system font |
 | Start orb | Custom image, see below |
