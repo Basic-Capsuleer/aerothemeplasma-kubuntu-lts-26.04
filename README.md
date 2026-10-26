@@ -47,6 +47,8 @@ Everything below is **fixed** in this repository.
 - Tray and taskbar popups opening on the wrong screen (libplasma used screen-relative coordinates).
 - The floating start orb sometimes stuck at the top of a screen (KWin applies a new position only
   with the next frame; the orb now redraws once).
+- The volume mixer opening on another screen (its position mixed global and screen-relative
+  coordinates).
 
 **Bigger font, still sharp**
 - Taskbar buttons and icons grow with the taskbar height using the icon theme's real image sizes
