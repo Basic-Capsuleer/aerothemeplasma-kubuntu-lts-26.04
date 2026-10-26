@@ -72,7 +72,8 @@ and [libAeroQt](https://gitgud.io/atmk/libaero-qt))
   application-wide stylesheet hid them; now applied to the window header only).
 
 **LibreWolf** (`extras/librewolf/`): how to combine Geckium and Aero UserChrome with LibreWolf
-without losing its privacy settings, plus 100% caption buttons at 125% and a dark address bar.
+without losing its privacy settings, plus 100% caption buttons at 125%, a full tab strip that
+stays clear of the caption buttons when maximised, and a dark address bar.
 
 ## Licenses
 

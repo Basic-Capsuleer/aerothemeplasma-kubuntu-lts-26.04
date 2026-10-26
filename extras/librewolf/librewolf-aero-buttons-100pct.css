@@ -44,3 +44,20 @@
     --aero-titlebuttons-glow-close-h: 35px;
   }
 }
+
+/* Room for the caption buttons next to a full tab strip. When maximised the tabs move up next to
+   the caption buttons; Aero UserChrome reserves the buttons' room with a margin on the spacer after
+   the tabs, which is lost once the tab strip is full, so the tabs slid under the buttons. Reserve
+   that room on the tab row itself instead (same width as Aero UserChrome's own margin). */
+:root[gktitnative=true]:is([tabsintitlebar], [customtitlebar])[gktitbuttons=win]:not([gkpeoplestyle=titlebutton])[sizemode=maximized] .titlebar-spacer[type=post-tabs] {
+  margin-inline-end: 0 !important;
+}
+:root[gktitnative=true]:is([tabsintitlebar], [customtitlebar])[gktitbuttons=win][sizemode=maximized] #TabsToolbar-customization-target {
+  margin-inline-end: calc((14px + var(--aero-titlebuttons-minimize-width) + var(--aero-titlebuttons-maximize-width) + var(--aero-titlebuttons-close-width) + var(--aero-titlebuttons-right-offset)) / var(--aero-hidpi-scale)) !important;
+}
+/* In a normal window the tab row sits below the buttons; with a full tab strip the new-tab button
+   ended about 5 px from the window edge against about 16 px left of the first tab. Make the right
+   side match the left. */
+:root[gktitnative=true]:is([tabsintitlebar], [customtitlebar])[gktitbuttons=win]:not([sizemode=maximized]) #TabsToolbar-customization-target {
+  margin-inline-end: 11px !important;
+}

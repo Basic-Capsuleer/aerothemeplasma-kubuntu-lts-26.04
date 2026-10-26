@@ -273,7 +273,8 @@ sudo cp "$E/geckium-sandbox.js" /usr/share/librewolf/defaults/pref/geckium-sandb
 ```
 
 What the two CSS files do: `librewolf-aero-buttons-100pct.css` keeps the caption buttons at 100%
-(matching the window buttons of other programs) when LibreWolf runs at 125%;
+(matching the window buttons of other programs) when LibreWolf runs at 125%, and keeps a full tab
+strip clear of the caption buttons when maximised (with an even gap at the right in a normal window);
 `librewolf-urlbar-dark.css` gives the address bar a dark grey in both states with Geckium's dark
 mode, and hides the suggestion list under it (its background stayed white; autofill still works).
 
