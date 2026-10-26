@@ -65,6 +65,7 @@ Everything below is **fixed** in this repository.
 **Aero Dolphin** (`apps/aero-dolphin/`, from [Albert Tomanek's fork](https://gitgud.io/atmk/dolphin-aero)
 and [libAeroQt](https://gitgud.io/atmk/libaero-qt))
 - Back/forward buttons at 125%; address bar and search field as tall as the font needs.
+- Tab close buttons grow with the font and line up with the tab text.
 - Free-space bars coloured again and the folder tree's expand arrows visible again (the fork's
   application-wide stylesheet hid them; now applied to the window header only).
 

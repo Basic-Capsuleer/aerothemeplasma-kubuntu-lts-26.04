@@ -28,5 +28,4 @@ https://gitgud.io/wackyideas/aerothemeplasma. No support, not actively maintaine
 - `docs/fork-notes.md`: decisions and history of this fork; the rest of `docs/` is upstream's
 
 ## State (2026-10-26)
-Published 2026-10-24. Working on the maintainer's laptop and main PC setup; possible open item:
-Aero Dolphin's tab close buttons don't scale with the font yet.
+Published 2026-10-24. Aero Dolphin's tab close buttons scale with the font since 2026-10-26.

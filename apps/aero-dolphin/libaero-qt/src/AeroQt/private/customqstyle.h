@@ -24,6 +24,7 @@ namespace Private {
 		QSize sizeFromContents(QStyle::ContentsType ct, const QStyleOption *opt, const QSize &contentsSize, const QWidget *widget = nullptr) const override;
 
 		int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override;
+		QRect subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *widget) const override;
 
         void polish(QWidget *) override;
 

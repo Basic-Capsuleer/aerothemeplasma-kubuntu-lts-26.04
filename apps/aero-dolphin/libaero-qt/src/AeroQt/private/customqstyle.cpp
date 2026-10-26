@@ -56,8 +56,35 @@ QIcon CustomQStyle::standardIcon(QStyle::StandardPixmap standardIcon, const QSty
 	return QProxyStyle::standardIcon(standardIcon, option, _w);
 }
 
+// How much bigger the system font is than the standard 9 pt (12 px) the Aero look was designed for
+// (at least 1, so nothing changes at the standard size)
+static qreal systemFontScale()
+{
+	const QFont font = QApplication::font();
+	QFont designFont = font;
+	designFont.setPixelSize(12);
+	return qMax<qreal>(1, QFontMetricsF(font).height() / QFontMetricsF(designFont).height());
+}
+
 void CustomQStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *_w) const
 {
+	if (element == QStyle::PE_IndicatorTabClose) {
+		// Kvantum draws the tab close cross at the theme's fixed size in the middle of the button, so
+		// draw it scaled by the font ratio to fill the bigger button (it's an SVG, so it stays sharp)
+		const qreal scale = systemFontScale();
+		if (scale > 1) {
+			const QRectF r = option->rect;
+			QStyleOption scaled(*option);
+			scaled.rect = QRectF(-r.width() / (2 * scale), -r.height() / (2 * scale), r.width() / scale, r.height() / scale).toRect();
+			painter->save();
+			painter->translate(r.center());
+			painter->scale(scale, scale);
+			QProxyStyle::drawPrimitive(element, &scaled, painter, _w);
+			painter->restore();
+			return;
+		}
+	}
+
     if (_w) {
         if (element == QStyle::PE_Widget) {
             if (option == &_amGettingThemed_dummy) {    // used by amGettingThemed()
@@ -190,11 +217,38 @@ QSize CustomQStyle::sizeFromContents(QStyle::ContentsType ct, const QStyleOption
 	return QProxyStyle::sizeFromContents(ct, opt, contentsSize, widget);
 }
 
+QRect CustomQStyle::subElementRect(QStyle::SubElement element, const QStyleOption *option, const QWidget *_w) const
+{
+	QRect r = QProxyStyle::subElementRect(element, option, _w);
+
+	if (element == QStyle::SE_TabBarTabLeftButton || element == QStyle::SE_TabBarTabRightButton) {
+		const auto *tab = qstyleoption_cast<const QStyleOptionTab *>(option);
+		if (tab && r.isValid() && systemFontScale() > 1
+		    && (tab->shape == QTabBar::RoundedNorth || tab->shape == QTabBar::TriangularNorth)) {
+			// Kvantum moves tab buttons down by 30% of (tab height - button height), which only
+			// matches the text at the standard font size (left unchanged there). With a bigger font,
+			// centre them on the text instead: Windows7Aero's tab margins (4 px top, 1 px bottom) put
+			// the text 1.5 px below the middle of the tab.
+			r.moveTop(tab->rect.top() + qRound((tab->rect.height() - r.height()) / 2.0 + 1.5));
+		}
+	}
+
+	return r;
+}
+
 int CustomQStyle::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *_w) const
 {
 	if (_w) {
 		if (_w->inherits("QCommandLinkButton") && metric == QStyle::PM_ButtonShiftHorizontal) // https://code.qt.io/cgit/qt/qtbase.git/tree/src/widgets/widgets/qcommandlinkbutton.cpp#n177
 			return 0;
+	}
+
+	if (metric == QStyle::PM_TabCloseIndicatorWidth || metric == QStyle::PM_TabCloseIndicatorHeight) {
+		// Kvantum gives tab close buttons a fixed size (the theme's indicator size, 12 px) and places
+		// them lower the taller the tab is compared with the button, so with a bigger system font
+		// they were small and too low. Growing them by the same ratio as the font keeps both the
+		// size and the position in proportion (drawPrimitive scales the cross itself to match).
+		return qRound(QProxyStyle::pixelMetric(metric, option, _w) * systemFontScale());
 	}
 
 	return QProxyStyle::pixelMetric(metric, option, _w);

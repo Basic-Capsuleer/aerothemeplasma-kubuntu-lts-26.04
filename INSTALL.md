@@ -164,7 +164,7 @@ fixes keep it in place).
 The file manager in the Windows 7 Explorer look. It **replaces Ubuntu's Dolphin**.
 
 Note: it is KDE's Dolphin development version of 23 May 2026 (later Dolphin 26.08), labelled
-25.12.3, plus the Aero changes and three fixes from this fork. It works with Ubuntu 26.04's KDE
+25.12.3, plus the Aero changes and four fixes from this fork. It works with Ubuntu 26.04's KDE
 Frameworks 6.24.
 
 ### 1. Extra build packages
