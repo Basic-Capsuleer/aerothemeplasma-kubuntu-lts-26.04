@@ -1,14 +1,18 @@
 # CLAUDE.md
 
+> [!CAUTION]
+> **Never sync this fork with the original** (no GitHub "Sync fork", no merging or pulling from
+> upstream). Upstream targets newer Plasma versions and would break this frozen Plasma 6.6.6
+> version.
+
 Frozen personal fork of AeroThemePlasma for **Kubuntu 26.04 LTS, Plasma 6.6.6, Wayland only**,
 with a bigger system font (Segoe UI 11–12 at 100% scaling) and multiple screens. Public on GitHub
 as a fork of the read-only mirror `aeroshell-desktop/aerothemeplasma`; the real upstream is
 https://gitgud.io/wackyideas/aerothemeplasma. No support, not actively maintained.
 
 ## Rules
-- Only branch: `main`. Never use GitHub's "Sync fork" and never merge upstream: upstream targets
-  newer Plasma versions. The `main` branch has a ruleset (no deletion, no force push, pull
-  requests required; repository admin may bypass).
+- Only branch: `main` (see the warning above about syncing). It has a ruleset: no deletion, no
+  force push, pull requests required; the repository admin may bypass.
 - All components are bundled and frozen in `repos/` (plus Aero Dolphin in `apps/aero-dolphin/`);
   `install.sh` builds from these folders and downloads nothing. Keep it that way.
 - Changes must keep the standard font size unchanged; size fixes scale with the system font.
