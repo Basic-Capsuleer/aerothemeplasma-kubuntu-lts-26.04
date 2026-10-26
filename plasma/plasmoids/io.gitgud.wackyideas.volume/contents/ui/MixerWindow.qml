@@ -43,7 +43,12 @@ Window {
         if(visible) {
 
             var pos = main.mapToGlobal(main.x, main.y);
-            var availScreen = Plasmoid.containment.availableScreenRect;
+            // availableScreenRect is relative to its own screen, while pos is global: move it to the
+            // screen's global position, otherwise the mixer lands on the wrong screen with several screens
+            var screenGeometry = Plasmoid.containment.screenGeometry;
+            var relativeAvail = Plasmoid.containment.availableScreenRect;
+            var availScreen = Qt.rect(screenGeometry.x + relativeAvail.x, screenGeometry.y + relativeAvail.y,
+                                      relativeAvail.width, relativeAvail.height);
             if(Plasmoid.location === PlasmaCore.Types.BottomEdge) {
                 x = pos.x - mixer.width / 2;
                 y = pos.y - mixer.height;
@@ -60,8 +65,8 @@ Window {
             if(KWindowSystem.isPlatformWayland) {
                 var wl_width = mixer.width + decorationMetrics.decoration.borderLeft + decorationMetrics.decoration.borderRight
                 var wl_height = mixer.height + decorationMetrics.decoration.borderTop + decorationMetrics.decoration.borderBottom
-                var wl_x = Math.max(availScreen.x, Math.min(x, availScreen.width-wl_width));
-                var wl_y = Math.max(availScreen.y, Math.min(y, availScreen.height-wl_height));
+                var wl_x = Math.max(availScreen.x, Math.min(x, availScreen.x + availScreen.width - wl_width));
+                var wl_y = Math.max(availScreen.y, Math.min(y, availScreen.y + availScreen.height - wl_height));
                 Plasmoid.setPopupPosition(mixer, wl_x, wl_y);
             }
         }
