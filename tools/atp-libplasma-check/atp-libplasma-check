@@ -1,27 +1,36 @@
 #!/bin/bash
-# atp-libplasma-check: guards the AeroThemePlasma version of libplasma.
+# atp-libplasma-check: guards the AeroThemePlasma version of libplasma and the KWin and
+# KDecoration versions the theme was built against.
 #
 # Runs at every login (via ~/.config/autostart). When everything is fine it does
 # nothing at all: no window, no notification. It only opens a popup window when:
 #   1. the Aero libplasma has been replaced (for example by an automatic security update),
-#   2. Ubuntu offers a newer libplasma that is waiting because of the hold,
-#   3. the apt hold on the libplasma packages has been removed.
+#   2. KWin or KDecoration changed after the theme was built (the theme's effects then break),
+#   3. Ubuntu offers a newer libplasma, KWin or KDecoration that is waiting because of the hold
+#      (only once Ubuntu has finished rolling it out to everyone; see is_phased),
+#   4. the apt hold on any of these packages has been removed.
 #
 # Usage:
 #   atp-libplasma-check            run the check (what the login autostart does)
 #   atp-libplasma-check --status   print the check results in the terminal, no popup
-#   atp-libplasma-check --record   remember the currently installed libplasma as "ours"
-#                                  (run this after every rebuild of libplasma)
-#   atp-libplasma-check --demo X   show the popup with example text, X = replaced|update|hold|all
+#   atp-libplasma-check --record   remember the installed libplasma as "ours" and the KWin and
+#                                  KDecoration versions the theme was built against
+#                                  (run this after every rebuild of the theme)
+#   atp-libplasma-check --demo X   show the popup with example text, X = replaced|changed|update|hold|all
 
 HERE="$HOME/.local/share/atp-libplasma-check"
 EXPECTED="$HERE/expected.conf"
 STEPS="$HERE/update-steps.txt"
 LIBDIR=/usr/lib/x86_64-linux-gnu
-LIBS="libPlasma.so.7 libPlasmaQuick.so.7"
-PKGS="libplasma7 libplasmaquick7 libplasma-dev"
 TITLE="AeroThemePlasma: libplasma check"
 ICON="preferences-desktop-theme-global"
+
+# Guarded components: "display name|package whose version is shown|all packages to hold"
+COMPONENTS=(
+    "libplasma|libplasma7|libplasma7 libplasmaquick7 libplasma-dev"
+    "KWin|kwin-wayland|kwin-wayland kwin-common kwin-data kwin-dev libkwin6"
+    "KDecoration|libkdecorations3-6|libkdecorations3-6 libkdecorations3private2 libkdecorations3-dev"
+)
 
 # --- helpers -----------------------------------------------------------------
 
@@ -34,6 +43,9 @@ lib_hash() {    # sha256 of the file a library link currently points to
 
 installed_version() { dpkg-query -W -f='${Version}' "$1" 2>/dev/null; }
 candidate_version() { apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ {print $2}'; }
+is_installed() { [ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null)" = "install ok installed" ]; }
+# "4:6.6.7-0ubuntu0.1" -> "6.6.7"
+short_version() { sed -e 's/^[0-9]*://' -e 's/-.*//' <<<"$1"; }
 
 # Which apt run touched libplasma7 after we recorded our version? Prints date + cause.
 find_replacement_cause() {
@@ -58,6 +70,13 @@ describe_cause() {
     esac
 }
 
+# True while Ubuntu is still rolling the given version out to a percentage of computers
+# (a "phased update"): apt-cache policy then shows "(phased NN%)" next to that version.
+is_phased() {
+    apt-cache policy "$1" 2>/dev/null |
+    awk -v v="$2" '$1 == v || ($1 == "***" && $2 == v) { if (/phased/) found = 1 } END { exit !found }'
+}
+
 # --- --record ----------------------------------------------------------------
 
 if [ "$1" = "--record" ]; then
@@ -68,20 +87,24 @@ if [ "$1" = "--record" ]; then
         echo "HASH_libPlasma=\"$(lib_hash libPlasma.so.7)\""
         echo "HASH_libPlasmaQuick=\"$(lib_hash libPlasmaQuick.so.7)\""
         echo "PKG_VERSION=\"$(installed_version libplasma7)\""
+        echo "BUILT_FOR_KWin=\"$(installed_version kwin-wayland)\""
+        echo "BUILT_FOR_KDecoration=\"$(installed_version libkdecorations3-6)\""
     } > "$EXPECTED"
-    echo "Recorded the current libplasma as the Aero version:"
+    echo "Recorded the current libplasma as the Aero version, and the KWin and KDecoration"
+    echo "versions the theme is built against:"
     cat "$EXPECTED"
     exit 0
 fi
 
 # --- collect problems (or demo text) -----------------------------------------
 
-replaced=""; update=""; hold=""
+replaced=""; changed=""; update=""; rolling=""; hold=""
 
 if [ "$1" = "--demo" ]; then
     case "$2" in replaced|all) replaced="On <b>2026-11-03 06:31</b>, an <b>automatic security update</b> (unattended-upgrades) replaced the Aero libplasma with Ubuntu's version 6.6.6-0ubuntu0.2." ;; esac
-    case "$2" in update|all)   update="Ubuntu offers libplasma <b>6.6.7-0ubuntu0.1</b>; you have <b>6.6.6-0ubuntu0.1</b>." ;; esac
-    case "$2" in hold|all)     hold="Not on hold: <b>libplasma7 libplasmaquick7</b>" ;; esac
+    case "$2" in changed|all)  changed="The theme was built for KWin <b>6.6.7</b>, but KWin <b>6.6.8</b> is installed.<br>" ;; esac
+    case "$2" in update|all)   update="Ubuntu offers KWin <b>6.6.8</b>; you have <b>6.6.7</b>.<br>" ;; esac
+    case "$2" in hold|all)     hold="Not on hold: <b>kwin-wayland libkwin6</b>" ;; esac
 else
     if [ ! -f "$EXPECTED" ]; then
         replaced="The check has no record of the Aero libplasma yet. Run <b>atp-libplasma-check --record</b> right after installing it."
@@ -98,32 +121,53 @@ else
                 replaced="The Aero libplasma files have changed since $RECORDED_AT, but Ubuntu's update history doesn't say why (maybe a manual rebuild or reinstall)."
             fi
         fi
-    fi
 
-    inst=$(installed_version libplasma7); cand=$(candidate_version libplasma7)
-    if [ -n "$cand" ] && [ "$cand" != "(none)" ] && dpkg --compare-versions "$cand" gt "$inst"; then
-        update="Ubuntu offers libplasma <b>$cand</b>; you have <b>$inst</b>."
+        # Records made before KWin and KDecoration were guarded have no versions; skip those.
+        for name in KWin KDecoration; do
+            var="BUILT_FOR_$name"; built="${!var}"
+            [ -z "$built" ] && continue
+            [ "$name" = KWin ] && pkg=kwin-wayland || pkg=libkdecorations3-6
+            now=$(installed_version "$pkg")
+            if [ "$now" != "$built" ]; then
+                changed+="The theme was built for $name <b>$(short_version "$built")</b>, but $name <b>$(short_version "$now")</b> is installed.<br>"
+            fi
+        done
     fi
 
     held=$(apt-mark showhold 2>/dev/null)
     missing=""
-    for p in $PKGS; do grep -qx "$p" <<<"$held" || missing="$missing $p"; done
+    for component in "${COMPONENTS[@]}"; do
+        IFS='|' read -r name shown packages <<<"$component"
+        inst=$(installed_version "$shown"); cand=$(candidate_version "$shown")
+        if [ -n "$cand" ] && [ "$cand" != "(none)" ] && [ -n "$inst" ] && dpkg --compare-versions "$cand" gt "$inst"; then
+            if is_phased "$shown" "$cand"; then
+                rolling+="$name $(short_version "$cand") (you have $(short_version "$inst")) "
+            else
+                update+="Ubuntu offers $name <b>$(short_version "$cand")</b>; you have <b>$(short_version "$inst")</b>.<br>"
+            fi
+        fi
+        for p in $packages; do
+            is_installed "$p" && ! grep -qx "$p" <<<"$held" && missing="$missing $p"
+        done
+    done
     [ -n "$missing" ] && hold="Not on hold:<b>$missing</b>"
 fi
 
 # --- --status: report in the terminal ----------------------------------------
 
 if [ "$1" = "--status" ]; then
-    strip() { sed -e 's/<[^>]*>//g'; }
+    strip() { sed -e 's/<br>/; /g' -e 's/<[^>]*>//g' -e 's/; $//'; }
     echo "Aero libplasma intact : $([ -z "$replaced" ] && echo yes || echo "NO - $(strip <<<"$replaced")")"
+    echo "Theme matches KWin    : $([ -z "$changed" ] && echo yes || echo "NO - $(strip <<<"$changed")")"
     echo "Update waiting        : $([ -z "$update" ] && echo no || strip <<<"$update")"
+    echo "Still rolling out     : $([ -z "$rolling" ] && echo no || echo "$rolling- Ubuntu is still rolling this out; the popup waits until it's finished")"
     echo "Hold in place         : $([ -z "$hold" ] && echo yes || echo "NO - $(strip <<<"$hold")")"
     exit 0
 fi
 
 # --- nothing wrong: stay completely silent -----------------------------------
 
-[ -z "$replaced$update$hold" ] && exit 0
+[ -z "$replaced$changed$update$hold" ] && exit 0
 
 # --- build the popup text -------------------------------------------------------
 
@@ -133,6 +177,11 @@ if [ -n "$replaced" ]; then
     msg+="<p>$replaced</p>"
     msg+="<p>Parts of the theme (dialogs, popups, shadows) may look wrong until you rebuild it.</p>"
 fi
+if [ -n "$changed" ]; then
+    msg+="<h3>KWin changed after the theme was built</h3>"
+    msg+="<p>$changed</p>"
+    msg+="<p>The glass and other effects may not work until you rebuild the theme.</p>"
+fi
 if [ -n "$update" ]; then
     msg+="<h3>A Plasma update is waiting</h3>"
     msg+="<p>$update</p>"
@@ -141,7 +190,7 @@ fi
 if [ -n "$hold" ]; then
     msg+="<h3>The protective hold is missing</h3>"
     msg+="<p>$hold</p>"
-    msg+="<p>Ubuntu (including automatic security updates) can now replace the Aero libplasma without asking.</p>"
+    msg+="<p>Ubuntu (including automatic security updates) can now replace these packages without asking, and the theme may stop working.</p>"
 fi
 msg+="<p>This message appears at every login until it's resolved.</p>"
 

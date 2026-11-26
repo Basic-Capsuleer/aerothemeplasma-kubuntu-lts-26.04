@@ -1,22 +1,27 @@
-AEROTHEMEPLASMA: UPDATING OR RESTORING LIBPLASMA
-================================================
+AEROTHEMEPLASMA: UPDATING PLASMA OR RESTORING LIBPLASMA
+======================================================
 
-Use these steps when the login popup says that a Plasma update is waiting, or
-that the Aero libplasma has been replaced. Run the commands in a terminal
-(Konsole), one at a time. Commands starting with "sudo" ask for your password.
+Use these steps when the login popup says that a Plasma update is waiting, that
+KWin changed after the theme was built, or that the Aero libplasma has been
+replaced. Run the commands in a terminal (Konsole), one at a time. Commands
+starting with "sudo" ask for your password.
 
-Do these steps when you have about an hour and can log out at the end.
+Do these steps when you have about an hour and can log out at the end. Stay at
+the terminal while the theme rebuilds: it asks for your password partway, and
+the request expires after a few minutes.
 If anything gives an error, stop. This fork comes without support; the Timeshift
 snapshot from step 1 is your way back.
 
 
 1. TAKE A SNAPSHOT
-   Open Timeshift and click "Create". Comment: "before libplasma update".
+   Open Timeshift and click "Create". Comment: "before Plasma update".
 
 
 2. RELEASE THE HOLD
+   libplasma, KWin and KDecoration are held together, because the theme is
+   built against all three.
 
-     sudo apt-mark unhold libplasma7 libplasmaquick7 libplasma-dev
+     sudo apt-mark unhold libplasma7 libplasmaquick7 libplasma-dev kwin-wayland kwin-common kwin-data kwin-dev libkwin6 libkdecorations3-6 libkdecorations3private2 libkdecorations3-dev
 
 
 3. INSTALL UBUNTU'S UPDATES
@@ -33,8 +38,8 @@ snapshot from step 1 is your way back.
 
 
 4. A NEW KDE VERSION?
-   Skip this step if the KDE version is still 6.6.7 (the popup only said the
-   Aero version had been replaced, not that there was a new version).
+   Skip this step if the libplasma version is still 6.6.7 (for example when only
+   KWin was updated, or the popup only said the Aero version had been replaced).
 
    If it is newer (for example 6.6.8): the libplasma in this fork is frozen at
    KDE 6.6.7 and has no git history to merge into. Merging KDE's new version
@@ -48,8 +53,8 @@ snapshot from step 1 is your way back.
 
 
 5. REBUILD AND REINSTALL THE THEME
-   This rebuilds libplasma and also the KWin effects, which need rebuilding
-   after a Plasma update too.
+   This rebuilds libplasma and also the KWin effects and window frames, which
+   need rebuilding after every KWin or KDecoration update.
 
      cd ~/aerothemeplasma-kubuntu-lts-26.04
      LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec UAC_LIBEXEC_DIR=lib/x86_64-linux-gnu/libexec bash install.sh --skip-x11
@@ -59,10 +64,10 @@ snapshot from step 1 is your way back.
 
 6. PUT THE HOLD BACK
 
-     sudo apt-mark hold libplasma7 libplasmaquick7 libplasma-dev
+     sh ~/aerothemeplasma-kubuntu-lts-26.04/tools/atp-hold.sh
 
 
-7. TELL THE LOGIN CHECK ABOUT THE NEW AERO LIBPLASMA
+7. TELL THE LOGIN CHECK ABOUT THE NEW BUILD
 
      ~/.local/share/atp-libplasma-check/atp-libplasma-check --record
 
@@ -70,8 +75,9 @@ snapshot from step 1 is your way back.
 
      ~/.local/share/atp-libplasma-check/atp-libplasma-check --status
 
-   All three lines should say: yes / no / yes.
+   The lines should say: yes / yes / no / no / yes.
 
 
-8. LOG OUT AND BACK IN
-   The new libraries are only loaded at login.
+8. RESTART THE COMPUTER
+   The new libraries and KWin are only loaded at the next login; a restart also
+   reloads the system services that were updated.

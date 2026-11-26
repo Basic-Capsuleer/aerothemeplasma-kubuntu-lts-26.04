@@ -55,15 +55,17 @@ Wait until it prints `Done.`
 ### 5. Protect the Aero libplasma
 
 Ubuntu updates (including automatic security updates and Discover) would otherwise replace the
-theme's libplasma with Ubuntu's own. The hold script puts it (and Aero Dolphin's packages, part 2)
-on hold:
+theme's libplasma with Ubuntu's own, or update KWin and KDecoration, which the theme's effects and
+window frames are built against (they then stop working until the theme is rebuilt). The hold
+script puts all of these (and Aero Dolphin's packages, part 2) on hold:
 
 ```bash
 sh ~/aerothemeplasma-kubuntu-lts-26.04/tools/atp-hold.sh
 ```
 
 Then install the login check: completely silent when all is well; it only shows a popup when the
-Aero libplasma was replaced, Ubuntu offers a newer one, or the hold is missing. Its "Show the
+Aero libplasma was replaced, KWin or KDecoration changed after the theme was built, Ubuntu has
+finished rolling out a newer version of one of them, or the hold is missing. Its "Show the
 steps" button explains what to do. No sudo needed:
 
 ```bash
@@ -76,8 +78,8 @@ sed "s|@HOME@|$HOME|" "$SRC/atp-libplasma-check.desktop" > ~/.config/autostart/a
 "$D/atp-libplasma-check" --record
 ```
 
-`--record` remembers the installed libplasma as "the Aero version"; only run it right after
-(re)building libplasma. `"$D/atp-libplasma-check" --status` shows the results in the terminal.
+`--record` remembers the installed libplasma as "the Aero version" and the KWin and KDecoration
+versions the theme is built against; only run it right after (re)building the theme. `"$D/atp-libplasma-check" --status` shows the results in the terminal.
 
 ### 6. Log in to the AeroThemePlasma session and run the welcome wizard
 
