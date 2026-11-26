@@ -1,5 +1,7 @@
 #version 140
 
+#include "colormanagement.glsl"
+
 uniform sampler2D texUnit;
 uniform float opacity;
 uniform float translate;
@@ -25,12 +27,9 @@ vec4 glowFragment()
 
     float t_x = uv.x;
 
-    float t_y;
-    if(useWayland) {
-        t_y = clamp(((gl_FragCoord.y) - windowPos.y) / textureSize.y, 0, 1);
-    } else {
-        t_y = clamp(((screenResolution.y - gl_FragCoord.y) - windowPos.y) / textureSize.y, 0, 1);
-    }
+    // Distance from the window's top edge, from the window's own coordinate (uv.y is 1 at the top).
+    // gl_FragCoord depends on how each screen's buffer is stored, which differs between screens.
+    float t_y = clamp(windowSize.y * (1.0 - uv.y) / textureSize.y, 0, 1);
     vec2 t_uv = vec2(windowSize.x * t_x / textureSize.x, t_y);
 
     vec4 result = texture2D(glowTexture, t_uv) * glowOpacity;
@@ -69,4 +68,8 @@ void main(void)
     fragColor *= colorMatrix;
     //fragColor.a = fragColor.a * opacity;
 
+    // The reflection and glow images are sRGB; convert them to the screen's encoding, which KWin
+    // sets per screen (based on upstream commit 25e54b4 for Plasma 6.7).
+    fragColor = sourceEncodingToNitsInDestinationColorspace(fragColor);
+    fragColor = nitsToDestinationEncoding(fragColor);
 }

@@ -51,3 +51,7 @@ user file `librewolf.overrides.cfg` instead; only the startup sandbox is switche
 - 2026-10-20 to 2026-10-24: multi-screen, scaling and Wayland fixes (see README and commits).
 - 2026-10-24: published as a fork of the GitHub mirror.
 - 2026-10-26: CLAUDE.md and these notes added.
+- 2026-11-26: libplasma updated to KDE 6.6.7; Aero glass corner glow fixed for KWin 6.6.7 (it was
+  added without converting to the screen's colour encoding, partly as upstream 25e54b4 does for
+  Plasma 6.7). The theme must be rebuilt after every KWin update: on 2026-11-20 KWin 6.6.7
+  arrived on its own and the glass blur stopped working until the theme was rebuilt.

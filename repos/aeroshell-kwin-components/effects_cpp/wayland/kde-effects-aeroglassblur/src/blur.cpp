@@ -123,7 +123,7 @@ BlurEffect::BlurEffect() : m_sharedMemory("kwinaero")
     }
 
     m_reflectPass.shader = ShaderManager::instance()->generateShaderFromFile(
-        ShaderTrait::MapTexture,
+        ShaderTrait::MapTexture | ShaderTrait::TransformColorspace,
         QStringLiteral(":/effects/aeroblur/shaders/vertex.vert"),
         QStringLiteral(":/effects/aeroblur/shaders/reflect.frag"));
 
@@ -1263,6 +1263,7 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
             const auto scale = viewport.scale();
 
 
+            m_reflectPass.shader->setColorspaceUniforms(ColorDescription::sRGB, renderTarget.colorDescription(), RenderingIntent::Perceptual);
             m_reflectPass.shader->setUniform(m_reflectPass.mvpMatrixLocation, projectionMatrix);
 			m_reflectPass.shader->setUniform(m_reflectPass.screenResolutionLocation, QVector2D(screenSize.width() * scale, screenSize.height() * scale));
 			m_reflectPass.shader->setUniform(m_reflectPass.windowPosLocation, QVector2D(scaledBackgroundRect.x(), scaledBackgroundRect.y()));

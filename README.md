@@ -63,6 +63,8 @@ Everything below is **fixed** in this repository.
 - Show desktop button: clicking minimises all windows, hovering shows Aero Peek with glass window
   frames (made to work and run smoothly on Wayland).
 - Taskbar previews also show minimised windows (on Wayland KWin can stream them).
+- The window glass's corner glow showed as a solid white block with Plasma 6.6.7 (the glow wasn't
+  converted to each screen's colour encoding, and was placed wrongly on lower screens).
 
 **Aero Dolphin** (`apps/aero-dolphin/`, from [Albert Tomanek's fork](https://gitgud.io/atmk/dolphin-aero)
 and [libAeroQt](https://gitgud.io/atmk/libaero-qt))
