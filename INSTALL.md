@@ -1,6 +1,6 @@
 # Installation (Kubuntu 26.04 LTS, Wayland)
 
-Only for **Kubuntu 26.04 LTS with Plasma 6.6.6** (check with `apt-cache policy libplasma7`).
+Only for **Kubuntu 26.04 LTS with Plasma 6.6.7** (check with `apt-cache policy libplasma7`).
 No support; see the warning in [README.md](README.md). Make a **Timeshift snapshot** first.
 
 Commands starting with `sudo` ask for your password. Run them one at a time.

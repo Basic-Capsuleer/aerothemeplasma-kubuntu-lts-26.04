@@ -28,19 +28,19 @@ snapshot from step 1 is your way back.
 
      apt-cache policy libplasma7
 
-   The "Installed:" line shows it, for example 6.6.7-0ubuntu0.1.
-   The part before the dash (here 6.6.7) is the KDE version.
+   The "Installed:" line shows it, for example 6.6.8-0ubuntu0.1.
+   The part before the dash (here 6.6.8) is the KDE version.
 
 
 4. A NEW KDE VERSION?
-   Skip this step if the KDE version is still 6.6.6 (the popup only said the
+   Skip this step if the KDE version is still 6.6.7 (the popup only said the
    Aero version had been replaced, not that there was a new version).
 
-   If it is newer (for example 6.6.7): the libplasma in this fork is frozen at
-   KDE 6.6.6 and has no git history to merge into. Merging KDE's new version
+   If it is newer (for example 6.6.8): the libplasma in this fork is frozen at
+   KDE 6.6.7 and has no git history to merge into. Merging KDE's new version
    needs the original repositories (https://gitgud.io/aeroshell/libplasma,
    branch Plasma/6.6, plus KDE's https://invent.kde.org/plasma/libplasma tag
-   v6.6.7) and is not covered here. Stay on the hold until then.
+   v6.6.8) and is not covered here. Stay on the hold until then.
 
    NOTE: if the first two numbers change (for example 6.6 becomes 6.7), this is
    a bigger Plasma upgrade. The theme then needs its Plasma/6.7 version, which

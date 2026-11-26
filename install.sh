@@ -2,7 +2,7 @@
 CUR_DIR=${PWD}
 
 # This fork includes every component (frozen at versions that work on Kubuntu 26.04 LTS with
-# Plasma 6.6.6) in repos/, so nothing is downloaded: each part is built from its folder there.
+# Plasma 6.6.7) in repos/, so nothing is downloaded: each part is built from its folder there.
 
 SU_CMD=sudo
 if [[ -z "$(command -v $SU_CMD)" ]]; then

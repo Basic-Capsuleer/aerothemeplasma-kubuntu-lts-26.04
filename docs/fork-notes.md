@@ -15,6 +15,12 @@ Ubuntu's own 6.6.6 installed, `ldconfig` could switch the theme's library off. M
 official 6.6.6 (no conflicts) keeps the version equal, and an apt hold plus a login check
 (`tools/`) protect it from updates.
 
+**libplasma updated to KDE v6.6.7 (2026-11-26).** Ubuntu released Plasma 6.6.7 as a bug-fix
+update. KDE's changes from v6.6.6 to v6.6.7 (18 files, mostly QML text wrapping and a list item
+size fix) are applied to `repos/libplasma`, with no conflicts with the Aero changes. Tested on the
+laptop before committing. The fork stays on Plasma 6.6 and follows only Ubuntu's 6.6.x bug-fix
+releases; this replaces "frozen at 6.6.6" from 2026-10-19.
+
 **Version checks lowered (2026-10-19).** aeroshell-workspace asked for PlasmaActivities 6.6.5
 (Ubuntu: 6.6.4, identical code) and aeroshell-kwin-components for wayland-protocols 1.48 (Ubuntu:
 1.47; the code doesn't use it, KWin needs 1.45).

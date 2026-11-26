@@ -4,7 +4,7 @@ A frozen, personal fork of [AeroThemePlasma](https://gitgud.io/wackyideas/aeroth
 WackyIdeas and contributors (the Windows 7 look for KDE Plasma), set up and fixed for **one
 specific system**:
 
-- **Kubuntu 26.04 LTS** with **Plasma 6.6.6**, KDE Frameworks 6.24, Qt 6.10
+- **Kubuntu 26.04 LTS** with **Plasma 6.6.7**, KDE Frameworks 6.24, Qt 6.10
 - **Wayland** only (installed with `--skip-x11`)
 - **Multiple screens**
 - **A bigger system font** (11–12 pt) at 100% display scaling, so everything is bigger but stays
@@ -30,14 +30,14 @@ The original project's README and install guide are kept as
 ## What's different from the original
 
 All parts of the theme are **included in this repository** (in `repos/`), frozen at versions that
-work together on Plasma 6.6.6, so the install script downloads nothing.
+work together on Plasma 6.6.7, so the install script downloads nothing.
 
 Everything below is **fixed** in this repository.
 
 **Making it work on Kubuntu 26.04 LTS**
 - The theme's Plasma/6.6 versions (the newest code targets Plasma 6.8); aeroshell-sddm-kcm pinned
   to its last 6.6.5 version.
-- libplasma: the theme's version merged with KDE's official 6.6.6, so Ubuntu's library versioning
+- libplasma: the theme's version merged with KDE's official 6.6.7, so Ubuntu's library versioning
   can't switch it off. A login check warns when an update replaces it (`tools/`).
 - Two version checks lowered to what Ubuntu 26.04 ships (PlasmaActivities 6.6.4,
   wayland-protocols 1.45).

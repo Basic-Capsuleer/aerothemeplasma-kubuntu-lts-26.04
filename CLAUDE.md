@@ -2,10 +2,10 @@
 
 > [!CAUTION]
 > **Never sync this fork with the original** (no GitHub "Sync fork", no merging or pulling from
-> upstream). Upstream targets newer Plasma versions and would break this frozen Plasma 6.6.6
+> upstream). Upstream targets newer Plasma versions and would break this frozen Plasma 6.6.7
 > version.
 
-Frozen personal fork of AeroThemePlasma for **Kubuntu 26.04 LTS, Plasma 6.6.6, Wayland only**,
+Frozen personal fork of AeroThemePlasma for **Kubuntu 26.04 LTS, Plasma 6.6.7, Wayland only**,
 with a bigger system font (Segoe UI 11–12 at 100% scaling) and multiple screens. Public on GitHub
 as a fork of the read-only mirror `aeroshell-desktop/aerothemeplasma`; the real upstream is
 https://gitgud.io/wackyideas/aerothemeplasma. No support, not actively maintained.
@@ -27,5 +27,6 @@ https://gitgud.io/wackyideas/aerothemeplasma. No support, not actively maintaine
 - `extras/librewolf/`: LibreWolf files; `tools/`: libplasma login check and hold script
 - `docs/fork-notes.md`: decisions and history of this fork; the rest of `docs/` is upstream's
 
-## State (2026-10-26)
-Published 2026-10-24. Aero Dolphin's tab close buttons scale with the font since 2026-10-26.
+## State (2026-11-26)
+Published 2026-10-24. libplasma follows Ubuntu's Plasma bug-fix releases (6.6.7 since
+2026-11-26); see `docs/fork-notes.md`.
