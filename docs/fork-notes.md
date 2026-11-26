@@ -55,3 +55,6 @@ user file `librewolf.overrides.cfg` instead; only the startup sandbox is switche
   added without converting to the screen's colour encoding, partly as upstream 25e54b4 does for
   Plasma 6.7). The theme must be rebuilt after every KWin update: on 2026-11-20 KWin 6.6.7
   arrived on its own and the glass blur stopped working until the theme was rebuilt.
+  The same colour conversion was then ported to the glass tint and blur (rest of 25e54b4), the
+  caption button glow (upstream f58780d), the snap preview (upstream ab3d2eb) and the blinking
+  startup cursor (KWin 6.6.7's own shader).

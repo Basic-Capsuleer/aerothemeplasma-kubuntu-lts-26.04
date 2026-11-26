@@ -1,8 +1,13 @@
 #version 140
 
+#include "colormanagement.glsl"
+
 uniform sampler2D texUnit;
 uniform float offset;
 uniform vec2 halfpixel;
+// Set on the last pass: convert the background from the screen's encoding to sRGB, so the tint
+// pass can work in sRGB (as upstream commit 25e54b4 does for Plasma 6.7).
+uniform bool applyInverseColorTransform;
 
 in vec2 uv;
 
@@ -23,5 +28,9 @@ void main(void)
 
     sum /= 12.0;
 
+    if (applyInverseColorTransform) {
+        sum = sourceEncodingToNitsInDestinationColorspace(sum);
+        sum = nitsToDestinationEncoding(sum);
+    }
     fragColor = sum;
 }

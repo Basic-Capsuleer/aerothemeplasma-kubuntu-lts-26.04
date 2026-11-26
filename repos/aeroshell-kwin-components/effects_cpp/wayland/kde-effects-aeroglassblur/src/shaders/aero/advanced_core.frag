@@ -1,5 +1,7 @@
 #version 140
 
+#include "colormanagement.glsl"
+
 uniform sampler2D texUnit;
 uniform float offset;
 uniform vec2 halfpixel;
@@ -40,4 +42,8 @@ void main(void)
 
     fragColor = vec4(primaryLayer + secondaryLayer + blurLayer, 1.0);
 
+    // The tint is worked out in sRGB; convert the result to the screen's encoding, which KWin sets
+    // per screen (as upstream commit 25e54b4 does for Plasma 6.7).
+    fragColor = sourceEncodingToNitsInDestinationColorspace(fragColor);
+    fragColor = nitsToDestinationEncoding(fragColor);
 }

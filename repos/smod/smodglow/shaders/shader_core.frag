@@ -1,5 +1,7 @@
 #version 140
 
+#include "colormanagement.glsl"
+
 uniform sampler2D sampler;
 uniform float opacity;
 uniform float bordertop;
@@ -36,4 +38,9 @@ void main()
     );
     fragColor = texture(sampler, newUV) * opacity;
     fragColor *= colorMatrix;
+
+    // The glow images are sRGB; convert them to the screen's encoding, which KWin sets per screen
+    // (as upstream commit f58780d does for Plasma 6.7).
+    fragColor = sourceEncodingToNitsInDestinationColorspace(fragColor);
+    fragColor = nitsToDestinationEncoding(fragColor);
 }

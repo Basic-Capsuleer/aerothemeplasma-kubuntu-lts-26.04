@@ -1,4 +1,5 @@
 #include "core/backendoutput.h"
+#include "core/rendertarget.h"
 #include "smod.h"
 #include "smodglow.h"
 #include <QVector2D>
@@ -125,6 +126,7 @@ void SmodGlowEffect::paintWindow(const RenderTarget &renderTarget,
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     ShaderManager::instance()->pushShader(m_shader.get());
+    m_shader->setColorspaceUniforms(ColorDescription::sRGB, renderTarget.colorDescription(), RenderingIntent::Perceptual);
 
     int uniform_opacity = m_shader->uniformLocation("opacity");
     int uniform_bordertop = m_shader->uniformLocation("bordertop");

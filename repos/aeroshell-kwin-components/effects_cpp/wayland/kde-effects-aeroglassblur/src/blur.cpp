@@ -85,7 +85,7 @@ BlurEffect::BlurEffect() : m_sharedMemory("kwinaero")
         m_downsamplePass.colorMatrixLocation = m_downsamplePass.shader->uniformLocation("colorMatrix");
     }
 
-    m_upsamplePass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+    m_upsamplePass.shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture | ShaderTrait::TransformColorspace,
                                                                               QStringLiteral(":/effects/aeroblur/shaders/vertex.vert"),
                                                                               QStringLiteral(":/effects/aeroblur/shaders/upsample.frag"));
     if (!m_upsamplePass.shader) {
@@ -96,11 +96,12 @@ BlurEffect::BlurEffect() : m_sharedMemory("kwinaero")
         m_upsamplePass.offsetLocation = m_upsamplePass.shader->uniformLocation("offset");
         m_upsamplePass.halfpixelLocation = m_upsamplePass.shader->uniformLocation("halfpixel");
         m_upsamplePass.colorMatrixLocation = m_upsamplePass.shader->uniformLocation("colorMatrix");
+        m_upsamplePass.applyInverseColorTransformLocation = m_upsamplePass.shader->uniformLocation("applyInverseColorTransform");
     }
 
     for(int i = 0; i < 3; i++) {
         qCWarning(KWIN_BLUR) << "Loading shader " << aeroShaderLocations[i];
-        m_aeroPasses[i].shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture,
+        m_aeroPasses[i].shader = ShaderManager::instance()->generateShaderFromFile(ShaderTrait::MapTexture | ShaderTrait::TransformColorspace,
                                                                                   QStringLiteral(":/effects/aeroblur/shaders/vertex.vert"),
                                                                                   aeroShaderLocations[i]);
         if (!m_aeroPasses[i].shader) {
@@ -1138,6 +1139,7 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
 
         m_upsamplePass.shader->setUniform(m_upsamplePass.mvpMatrixLocation, projectionMatrix);
         m_upsamplePass.shader->setUniform(m_upsamplePass.offsetLocation, float(m_offset / 2.5f));
+        m_upsamplePass.shader->setColorspaceUniforms(renderTarget.colorDescription(), ColorDescription::sRGB, RenderingIntent::AbsoluteColorimetricNoAdaptation);
 
         for (size_t i = renderInfo.framebuffers.size() - 1; i > 1; --i) {
             GLFramebuffer::popFramebuffer();
@@ -1146,6 +1148,7 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
             const QVector2D halfpixel(0.5 / (double)read->colorAttachment()->width(),
                                       0.5 / (double)read->colorAttachment()->height());
             m_upsamplePass.shader->setUniform(m_upsamplePass.halfpixelLocation, halfpixel);
+            m_upsamplePass.shader->setUniform(m_upsamplePass.applyInverseColorTransformLocation, i == 2);
 
             read->colorAttachment()->bind();
 
@@ -1203,6 +1206,7 @@ void BlurEffect::blur(const RenderTarget &renderTarget, const RenderViewport &vi
 
         ShaderManager::instance()->pushShader(m_aeroPasses[selectedPass].shader.get());
 
+        m_aeroPasses[selectedPass].shader->setColorspaceUniforms(ColorDescription::sRGB, renderTarget.colorDescription(), RenderingIntent::Perceptual);
         m_aeroPasses[selectedPass].shader->setUniform(m_aeroPasses[selectedPass].mvpMatrixLocation, projectionMatrix);
 
         const QVector2D halfpixel(0.5 / (double)read->colorAttachment()->width(),

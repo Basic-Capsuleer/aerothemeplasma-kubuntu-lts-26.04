@@ -10,11 +10,6 @@
 #include <KDecoration3/Decoration>
 #include <KDecoration3/DecoratedWindow>
 
-static void ensureResources()
-{
-    Q_INIT_RESOURCE(smodsnap);
-}
-
 namespace KWin
 {
 
@@ -31,12 +26,6 @@ SmodSnapEffect::SmodSnapEffect()
     anim2 = new SnapAnimation();
 
     loadTextures();
-
-    m_shader = ShaderManager::instance()->generateShaderFromFile(
-        ShaderTrait::MapTexture,
-        QString(),
-        QStringLiteral(":/effects/smodsnap/shaders/shader.frag")
-    );
 }
 
 SmodSnapEffect::~SmodSnapEffect()
@@ -55,11 +44,6 @@ void SmodSnapEffect::reconfigure(Effect::ReconfigureFlags flags)
     Q_UNUSED(flags)
 
     SMOD::registerResource(QStringLiteral("snapeffecttextures"));
-
-    if (effects->compositingType() == OpenGLCompositing)
-    {
-        ensureResources();
-    }
 }
 
 void SmodSnapEffect::windowAdded(KWin::EffectWindow *w)
